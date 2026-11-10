@@ -36,7 +36,9 @@ function lookup(dict, key) {
 
 function interpolate(text, params) {
   if (!params) return text;
-  return text.replace(/\{(\w+)\}/g, (m, name) => (params[name] ?? params[name] === 0 ? String(params[name]) : m));
+  // keep 0 (e.g. "0h 2m", "0 uncertain"): only a missing value leaves the {placeholder}
+  return text.replace(/\{(\w+)\}/g, (m, name) =>
+    params[name] === undefined || params[name] === null ? m : String(params[name]));
 }
 
 function initialLanguage() {

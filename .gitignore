@@ -22,3 +22,6 @@ backend/sent_emails/
 
 # Editor / tool folders
 .qodo/
+
+# Temporary browser profiles from test/screenshot scripts
+**/cdp-*/

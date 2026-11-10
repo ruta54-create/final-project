@@ -1,0 +1,24 @@
+# Python
+backend/venv/
+__pycache__/
+*.pyc
+backend/.env
+backend/db.sqlite3
+backend/media/
+backend/staticfiles/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# ESP32 secrets (Wi-Fi password, API key)
+device/**/secrets.h
+
+# Edge Impulse
+*.eim
+
+# Emails saved when no mail server is configured
+backend/sent_emails/
+
+# Editor / tool folders
+.qodo/

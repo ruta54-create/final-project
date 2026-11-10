@@ -1,0 +1,6 @@
+Django>=5.1
+djangorestframework>=3.15
+python-dotenv>=1.0
+Pillow>=10.4
+# only needed in production with DB_ENGINE=postgresql
+psycopg[binary]>=3.2

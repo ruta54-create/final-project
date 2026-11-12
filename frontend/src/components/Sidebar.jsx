@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Bell, Camera, Gamepad2, Home, LineChart, LogOut, Settings } from "lucide-react";
+import { Bell, BrainCircuit, Camera, Gamepad2, Home, LineChart, LogOut, Settings } from "lucide-react";
 import { useAuth, useBin } from "../context.jsx";
 import { usePolling } from "../api.js";
 import { useI18n } from "../i18n/index.jsx";
@@ -19,6 +19,7 @@ export default function Sidebar() {
     { to: "/alerts", key: "alerts", icon: Bell, badge: count },
     { to: "/control", key: "control", icon: Gamepad2 },
     { to: "/settings", key: "settings", icon: Settings },
+    { to: "/ai-lab", key: "aiLab", icon: BrainCircuit },
   ];
 
   return (

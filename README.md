@@ -65,7 +65,10 @@ everything from a web dashboard** in English, French or Kinyarwanda.
 
 | Area | What it does |
 |---|---|
-| **Edge AI sorting** | ESP32-CAM runs an Edge Impulse CNN (organic vs inorganic) in ~0.5 s. Unsure items (< 70 % confidence) go to *inorganic* so compost is never contaminated. |
+| **Edge AI sorting** | ESP32-S3-CAM runs a MobileNetV2 (int8, 600 KB) that recognises **organic, paper, plastic, metal**: organic + paper → organic compartment, plastic + metal → inorganic. Unsure items (< 70 %) go to *inorganic*. |
+| **Own trained model** | Trained on RealWaste + TrashNet on a laptop CPU in minutes (`ml/`); see [docs/DATASET_GUIDE.md](docs/DATASET_GUIDE.md) and `ml/output/MODEL_CARD.md`. |
+| **Test the AI (no hardware)** | Dashboard page: sample photos, upload or webcam → the same int8 model as the ESP32 → compartment decision; can send the result to the dashboard as a detection. |
+| **Teach the AI** | People confirm or correct each photo on the dashboard → real-world accuracy + confusion matrix → export checked photos → retrain. |
 | **Fill levels** | Ultrasonic sensor above each compartment → % full, every 30 s (median of 5 readings). |
 | **Prediction (ML)** | Linear-regression filling rate → "organic full in 6 h (tomorrow 04:30)". |
 | **Smell & climate** | MQ-135 gas + DHT22 temperature/humidity → "organic waste decomposing, empty within 24 h". |
@@ -138,9 +141,17 @@ final-project/
 │
 ├── device/                         HARDWARE CODE
 │   ├── esp32_main/esp32_main.ino   main controller: sensors, servos, LEDs, commands
-│   ├── esp32_cam/esp32_cam.ino     camera + Edge Impulse AI + photo upload
+│   ├── esp32_cam/esp32_cam.ino     camera + MobileNetV2 AI (4 materials) + photo upload
+│   ├── esp32_cam/camera_pins.h     board selection: ESP32-S3-CAM, XIAO ESP32S3, AI-Thinker
 │   ├── */secrets.example.h         Wi-Fi / server / API-key template: copy to secrets.h
 │   └── simulator.py                fake bin that behaves like both boards
+│
+├── ml/                             MACHINE LEARNING (Python 3.12 + TensorFlow)
+│   ├── prepare_dataset.py          RealWaste + TrashNet + own photos → 4 balanced classes
+│   ├── train_mobilenet.py          MobileNetV2 transfer learning + int8 export for the ESP32
+│   ├── serve_model.py              AI service for the dashboard's "Test the AI" page
+│   ├── requirements.txt
+│   └── output/                     model_int8.tflite, model_data.h, MODEL_CARD.md, charts
 │
 ├── tools/
 │   ├── system_check.py             32-point check of the running system
@@ -170,6 +181,8 @@ final-project/
 | [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md) | Problem, objectives, what was improved from the first idea, 12-week plan, risks |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How the parts talk, data flow, database tables, security, languages, deployment |
 | [docs/HARDWARE.md](docs/HARDWARE.md) | Components list, wiring tables, power, mechanical build, calibration |
+| [docs/DATASET_GUIDE.md](docs/DATASET_GUIDE.md) | **Datasets, training the AI on a laptop, ESP32-S3 deployment, results, teach-the-AI loop** |
+| [docs/EDGE_IMPULSE.md](docs/EDGE_IMPULSE.md) | **Putting the model in Edge Impulse (Bring your own model), settings, testing, Arduino library** |
 | [docs/AI_MODEL.md](docs/AI_MODEL.md) | Dataset, training in Edge Impulse, deployment, prediction & recommendation logic |
 | [docs/API.md](docs/API.md) | Every API endpoint with examples |
 | [docs/EMAIL.md](docs/EMAIL.md) | Email alerts: turning them on, Gmail setup, how sending works |

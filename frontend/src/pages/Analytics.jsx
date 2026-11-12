@@ -8,6 +8,56 @@ import Header from "../components/Header.jsx";
 import TrendChart from "../components/TrendChart.jsx";
 import { Card, Chips, ErrorBox, Loading, Stat } from "../components/ui.jsx";
 
+/** Accuracy of the AI inside the real bin, from items people checked on the Detections page. */
+function ModelQuality({ q }) {
+  const { t, fmt, itemLabel } = useI18n();
+  if (!q) return null;
+  return (
+    <Card title={t("review.qualityTitle")} extra={<span className="muted-title">{t("review.qualitySub", { n: q.reviewed })}</span>}>
+      {!q.reviewed ? (
+        <p className="empty">{t("review.noReviews")}</p>
+      ) : (
+        <div className="quality">
+          <div className="quality-stats">
+            <Stat tone="green" label={t("review.binOk")} value={fmt.pct(q.compartment_accuracy)} />
+            <Stat tone="blue" label={t("review.materialOk")} value={fmt.pct(q.accuracy)} />
+            {q.mistakes.length > 0 && (
+              <div className="mistakes">
+                <strong>{t("review.topMistakes")}</strong>
+                <ul>
+                  {q.mistakes.map((m) => (
+                    <li key={`${m.true}-${m.predicted}`}>
+                      {t("review.mistake", { real: itemLabel(m.true), ai: itemLabel(m.predicted).toLowerCase(), n: m.count })}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          <div className="table-scroll">
+            <table className="table matrix">
+              <caption>{t("review.matrix")}</caption>
+              <thead>
+                <tr><th />{q.labels.map((l) => <th key={l}>{itemLabel(l)}</th>)}</tr>
+              </thead>
+              <tbody>
+                {q.confusion.map((row, i) => (
+                  <tr key={q.labels[i]}>
+                    <th>{itemLabel(q.labels[i])}</th>
+                    {row.map((n, j) => (
+                      <td key={j} className={n ? (i === j ? "hit" : "miss") : ""}>{n || ""}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+}
+
 export default function Analytics() {
   const { bin } = useBin();
   const { t, fmt, itemLabel } = useI18n();
@@ -122,6 +172,8 @@ export default function Analytics() {
               <p className="muted small-text">{t("ana.collectionsNote")}</p>
             </Card>
           </section>
+
+          <ModelQuality q={data.model_quality} />
 
           <Card title={t("ana.history")}>
             <TrendChart points={readings?.points} fullLevel={bin.full_level} height={300} showGas />

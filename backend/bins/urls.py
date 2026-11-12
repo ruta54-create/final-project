@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from . import views_auth, views_dashboard, views_device, views_notifications
+from . import views_ai, views_auth, views_dashboard, views_device, views_notifications
 
 router = DefaultRouter()
 router.register("bins", views_dashboard.BinViewSet, basename="bin")
@@ -15,6 +15,9 @@ urlpatterns = [
     path("auth/logout/", views_auth.logout_view),
     path("auth/me/", views_auth.me),
     path("auth/change-password/", views_auth.change_password),
+    # test the AI model without hardware
+    path("ai/status/", views_ai.ai_status),
+    path("ai/classify/", views_ai.ai_classify),
     # email alerts
     path("notifications/settings/", views_notifications.notification_settings),
     path("notifications/test/", views_notifications.test_email),

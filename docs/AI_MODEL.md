@@ -1,5 +1,10 @@
 # AI & Analytics
 
+> **The model now recognises 4 materials (organic, paper, plastic, metal) and is trained with
+> `ml/train_mobilenet.py`.** The full, current guide is **[DATASET_GUIDE.md](DATASET_GUIDE.md)**: datasets, training on a
+> laptop, ESP32-S3 deployment, results and the "teach the AI" loop. Sections 6–8 below (fill level,
+> prediction, recommendations) are still current.
+
 The system uses three kinds of intelligence:
 
 | Part | Where it runs | Technique |

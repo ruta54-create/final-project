@@ -1,25 +1,22 @@
 /*
  * ================================================================
- *  Edge-AI Smart Dustbin - AI CAMERA (ESP32-CAM AI-Thinker)
+ *  Edge-AI Smart Dustbin - AI CAMERA (ESP32-S3-CAM recommended)
  * ================================================================
- *  Waits for "CAPTURE" from the main controller, takes a photo,
- *  runs the Edge Impulse model ON THE CAMERA (edge AI), answers
- *  "SORT organic 0.93" and uploads the photo + result to Django.
+ *  Waits for "CAPTURE" from the main controller, takes a photo, runs the
+ *  MobileNetV2 waste classifier ON THE CAMERA (edge AI), answers
+ *  "SORT organic 0.93" (or "EMPTY") and uploads the photo + result to Django.
  *
- *  Board:     "AI Thinker ESP32-CAM"  (PSRAM: Enabled)
- *  Libraries: your Edge Impulse Arduino library (.zip from Edge Impulse
- *             Studio -> Deployment -> Arduino library), ArduinoJson (v7)
- *  Setup:     1) change the #include below to your library name
- *             2) copy secrets.example.h -> secrets.h and edit it
- *  Upload:    with the ESP32-CAM-MB USB board (or FTDI, GPIO0 -> GND while flashing)
+ *  Model classes -> compartment of the bin
+ *      organic, paper   -> ORGANIC compartment   (biodegradable)
+ *      plastic, metal   -> INORGANIC compartment
+ *      background       -> nothing on the tray (optional 5th class) -> no sorting
+ *  Unsure (confidence < min_confidence from the dashboard) -> INORGANIC (never contaminate compost)
  *
- *  Wiring:    GPIO13 (RX) <- main ESP32 GPIO17 (TX2)
- *             GPIO14 (TX) -> main ESP32 GPIO16 (RX2)
- *             GND <-> GND,   5V from the common 5 V supply
- *             GPIO4 = on-board flash LED (or MOSFET for a LED ring)
- *
- *  Model labels: name your Edge Impulse classes "organic" and "inorganic".
- *  (Other names work too: put the organic ones in ORGANIC_LABELS.)
+ *  1) Select your board at the top of camera_pins.h (ESP32-S3-CAM, XIAO ESP32S3, AI-Thinker)
+ *  2) Arduino IDE: install your Edge Impulse library (.zip) + ArduinoJson (v7)
+ *  3) change the #include below to your library name
+ *  4) copy secrets.example.h -> secrets.h and edit it
+ *  Wiring: see camera_pins.h (UART to the main ESP32, LED ring MOSFET) and docs/HARDWARE.md
  */
 
 #include <smart_dustbin_inferencing.h>        // <-- CHANGE to <your_project_inferencing.h>
@@ -29,31 +26,15 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include "camera_pins.h"
 #include "secrets.h"
 
-#define FIRMWARE "1.0.0"
-#define MODEL_VERSION "organic-inorganic-v1"   // change when you retrain
+#define FIRMWARE "2.0.0"
+#define MODEL_VERSION "waste4-mobilenetv2-128-v1"   // change when you retrain (shown on the dashboard)
 
-const char* ORGANIC_LABELS[] = {"organic", "food_waste", "fruit_peel", "vegetable", "leaves", "bread", "eggshell"};
-const int UART_RX = 13, UART_TX = 14, FLASH_LED = 4;
-
-// ---------------- AI-Thinker camera pins
-#define PWDN_GPIO_NUM 32
-#define RESET_GPIO_NUM -1
-#define XCLK_GPIO_NUM 0
-#define SIOD_GPIO_NUM 26
-#define SIOC_GPIO_NUM 27
-#define Y9_GPIO_NUM 35
-#define Y8_GPIO_NUM 34
-#define Y7_GPIO_NUM 39
-#define Y6_GPIO_NUM 36
-#define Y5_GPIO_NUM 21
-#define Y4_GPIO_NUM 19
-#define Y3_GPIO_NUM 18
-#define Y2_GPIO_NUM 5
-#define VSYNC_GPIO_NUM 25
-#define HREF_GPIO_NUM 23
-#define PCLK_GPIO_NUM 22
+// Labels that go to the ORGANIC compartment. Everything else (plastic, metal) -> INORGANIC.
+const char* ORGANIC_LABELS[] = {"organic", "paper", "food_waste", "fruit_peel", "vegetable", "leaves", "cardboard"};
+const char* EMPTY_LABEL = "background";   // optional class: photo of the empty tray
 
 #define RAW_COLS 320   // QVGA
 #define RAW_ROWS 240
@@ -62,6 +43,10 @@ HardwareSerial MainSerial(1);
 static uint8_t* rgbBuf = nullptr;        // RGB888 frame for the model
 float minConfidence = 0.70;               // updated from the server
 unsigned long lastHeartbeat = 0;
+
+void light(bool on) {
+  if (LIGHT_GPIO_NUM >= 0) digitalWrite(LIGHT_GPIO_NUM, on ? HIGH : LOW);
+}
 
 // ================================================================ camera
 bool cameraInit() {
@@ -166,12 +151,12 @@ void uploadDetection(const uint8_t* jpg, size_t jpgLen, const char* label, const
 
 // ================================================================ capture + classify
 void handleCapture() {
-  digitalWrite(FLASH_LED, HIGH);              // uniform light = better accuracy
+  light(true);                                // uniform light = better accuracy
   delay(150);
   camera_fb_t* fb = esp_camera_fb_get();      // drop a stale frame
   if (fb) esp_camera_fb_return(fb);
   fb = esp_camera_fb_get();
-  digitalWrite(FLASH_LED, LOW);
+  light(false);
   if (!fb) { MainSerial.print("ERR camera\n"); return; }
 
   // keep a copy of the JPEG for the upload
@@ -196,15 +181,27 @@ void handleCapture() {
   int inferenceMs = millis() - t0;
   if (err != EI_IMPULSE_OK) { MainSerial.print("ERR model\n"); free(jpg); return; }
 
+  // best and second-best class (the runner-up helps when reviewing mistakes on the dashboard)
   const char* best = "unknown";
-  float conf = 0;
+  const char* second = "";
+  float conf = 0, conf2 = 0;
 #if EI_CLASSIFIER_OBJECT_DETECTION == 1
   for (uint32_t i = 0; i < result.bounding_boxes_count; i++)
     if (result.bounding_boxes[i].value > conf) { conf = result.bounding_boxes[i].value; best = result.bounding_boxes[i].label; }
 #else
-  for (size_t i = 0; i < EI_CLASSIFIER_LABEL_COUNT; i++)
-    if (result.classification[i].value > conf) { conf = result.classification[i].value; best = result.classification[i].label; }
+  for (size_t i = 0; i < EI_CLASSIFIER_LABEL_COUNT; i++) {
+    float v = result.classification[i].value;
+    if (v > conf) { conf2 = conf; second = best; conf = v; best = result.classification[i].label; }
+    else if (v > conf2) { conf2 = v; second = result.classification[i].label; }
+  }
 #endif
+
+  if (strcasecmp(best, EMPTY_LABEL) == 0) {   // the tray is empty: nothing to sort, nothing to upload
+    MainSerial.print("EMPTY\n");
+    Serial.printf("tray empty (%.0f%%)\n", conf * 100);
+    free(jpg);
+    return;
+  }
 
   const char* category = isOrganic(best) ? "organic" : "inorganic";
   // safety rule: unsure -> inorganic (never contaminate the compost)
@@ -212,7 +209,8 @@ void handleCapture() {
 
   // answer the main controller FIRST so the tray moves immediately
   MainSerial.printf("SORT %s %.3f\n", sortedTo, conf);
-  Serial.printf("%s (%s) %.0f%% in %d ms -> %s\n", best, category, conf * 100, inferenceMs, sortedTo);
+  Serial.printf("%s (%s) %.0f%%  [2nd: %s %.0f%%]  %d ms -> %s\n", best, category, conf * 100,
+                second, conf2 * 100, inferenceMs, sortedTo);
 
   if (jpg) {
     uploadDetection(jpg, jpgLen, best, category, sortedTo, conf, inferenceMs);
@@ -223,9 +221,8 @@ void handleCapture() {
 // ================================================================ setup / loop
 void setup() {
   Serial.begin(115200);
-  MainSerial.begin(115200, SERIAL_8N1, UART_RX, UART_TX);
-  pinMode(FLASH_LED, OUTPUT);
-  digitalWrite(FLASH_LED, LOW);
+  MainSerial.begin(115200, SERIAL_8N1, UART_RX_GPIO, UART_TX_GPIO);
+  if (LIGHT_GPIO_NUM >= 0) { pinMode(LIGHT_GPIO_NUM, OUTPUT); light(false); }
 
   if (!psramFound()) Serial.println("!! PSRAM not found: enable it in Tools menu");
   rgbBuf = (uint8_t*)ps_malloc(RAW_COLS * RAW_ROWS * 3);
@@ -234,7 +231,7 @@ void setup() {
     delay(2000);
     ESP.restart();
   }
-  Serial.printf("ESP32-CAM ready. Model input %dx%d, %d labels\n",
+  Serial.printf(CAMERA_BOARD_NAME " ready. Model input %dx%d, %d labels\n",
                 EI_CLASSIFIER_INPUT_WIDTH, EI_CLASSIFIER_INPUT_HEIGHT, EI_CLASSIFIER_LABEL_COUNT);
   ensureWifi();
   heartbeat();

@@ -25,3 +25,12 @@ backend/sent_emails/
 
 # Temporary browser profiles from test/screenshot scripts
 **/cdp-*/
+
+# Machine learning: environment, downloaded/processed datasets, training checkpoints
+ml/.venv/
+ml/datasets/
+ml/output/checkpoints/
+ml/output/*.keras
+backend/db.sqlite3-journal
+ml/train_log.txt
+ml/output/run_*/train_log.txt

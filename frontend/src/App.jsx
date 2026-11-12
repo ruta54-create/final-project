@@ -10,6 +10,7 @@ import Analytics from "./pages/Analytics.jsx";
 import Alerts from "./pages/Alerts.jsx";
 import Control from "./pages/Control.jsx";
 import Settings from "./pages/Settings.jsx";
+import AiLab from "./pages/AiLab.jsx";
 
 function NeedsBin({ children }) {
   const { bins, bin } = useBin();
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="/alerts" element={<NeedsBin><Alerts /></NeedsBin>} />
             <Route path="/control" element={<NeedsBin><Control /></NeedsBin>} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/ai-lab" element={<NeedsBin><AiLab /></NeedsBin>} />
             <Route path="/login" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

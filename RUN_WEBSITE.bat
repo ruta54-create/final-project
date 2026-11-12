@@ -53,6 +53,10 @@ if errorlevel 1 goto :error
 :run
 REM ---- 4. Start
 if /i "%MODE%"=="demo" start "Smart bin simulator" "%PY%" "%~dp0device\simulator.py"
+REM AI model service for the "Test the AI" page (needs the ml environment: see docs/DATASET_GUIDE.md)
+set "MLPY=%~dp0ml\.venv\Scripts\python.exe"
+if exist "%MLPY%" if exist "%~dp0ml\output\model_int8.tflite" start "AI model service" "%MLPY%" "%~dp0ml\serve_model.py"
+if not exist "%MLPY%" echo     (AI test page off: create the ml environment, see docs/DATASET_GUIDE.md section 4)
 echo.
 echo [4/4] Server running. KEEP THIS WINDOW OPEN. Press CTRL+C to stop.
 echo.

@@ -1,0 +1,4 @@
+organic
+paper
+plastic
+metal

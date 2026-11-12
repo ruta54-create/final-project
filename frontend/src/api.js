@@ -39,6 +39,24 @@ export async function api(path, { method = "GET", body } = {}) {
   return data;
 }
 
+/** POST a FormData (e.g. a photo) to the Django API, with session cookie + CSRF token. */
+export async function apiUpload(path, formData) {
+  const res = await fetch(`/api${path}`, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { Accept: "application/json", "X-CSRFToken": cookie("csrftoken") },
+    body: formData,
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    const err = new Error(errorText(data) || `${res.status} ${res.statusText}`);
+    err.status = res.status;
+    err.code = data?.code;
+    throw err;
+  }
+  return data;
+}
+
 /** Fetch `path` now and every `ms` milliseconds (null path = paused). */
 export function usePolling(path, ms = 5000) {
   const [state, setState] = useState({ data: null, error: null, loading: true });

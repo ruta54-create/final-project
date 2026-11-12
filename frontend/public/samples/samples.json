@@ -1,0 +1,42 @@
+[
+ {
+  "file": "organic-1.jpg",
+  "label": "organic",
+  "source": "RealWaste (CC BY 4.0)"
+ },
+ {
+  "file": "organic-2.jpg",
+  "label": "organic",
+  "source": "RealWaste (CC BY 4.0)"
+ },
+ {
+  "file": "paper-1.jpg",
+  "label": "paper",
+  "source": "RealWaste (CC BY 4.0)"
+ },
+ {
+  "file": "paper-2.jpg",
+  "label": "paper",
+  "source": "TrashNet (MIT)"
+ },
+ {
+  "file": "plastic-1.jpg",
+  "label": "plastic",
+  "source": "RealWaste (CC BY 4.0)"
+ },
+ {
+  "file": "plastic-2.jpg",
+  "label": "plastic",
+  "source": "TrashNet (MIT)"
+ },
+ {
+  "file": "metal-1.jpg",
+  "label": "metal",
+  "source": "RealWaste (CC BY 4.0)"
+ },
+ {
+  "file": "metal-2.jpg",
+  "label": "metal",
+  "source": "TrashNet (MIT)"
+ }
+]

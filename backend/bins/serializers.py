@@ -58,7 +58,12 @@ class DetectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Detection
         fields = ["id", "bin", "bin_name", "label", "category", "confidence", "sorted_to", "uncertain",
-                  "image_url", "inference_ms", "created_at"]
+                  "image_url", "inference_ms", "created_at",
+                  "true_label", "reviewed_by", "reviewed_at", "is_correct", "right_compartment"]
+
+    reviewed_by = serializers.CharField(source="reviewed_by.username", read_only=True, default=None)
+    is_correct = serializers.BooleanField(read_only=True, allow_null=True)
+    right_compartment = serializers.BooleanField(read_only=True, allow_null=True)
 
     def get_image_url(self, obj):
         if not obj.image:

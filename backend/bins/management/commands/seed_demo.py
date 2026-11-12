@@ -13,13 +13,15 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
-from bins.models import INORGANIC, ORGANIC, Bin, Collection, Detection, SensorReading
+from bins.models import BIN_OF, INORGANIC, ORGANIC, Bin, Collection, Detection, SensorReading
 from bins.models import Command as BinCommand
 from bins.services import alerts
 
 DEMO_KEY = "demo-key-bin-001"
-ORGANIC_LABELS = ["food_waste", "fruit_peel", "vegetable", "leaves", "bread", "eggshell"]
-INORGANIC_LABELS = ["plastic_bottle", "plastic_bag", "can", "glass", "wrapper", "paper_cup"]
+# the 4 materials the AI recognises, how often they appear, and the compartment they go to (paper is organic)
+MATERIAL_SHARE = {"organic": 0.38, "paper": 0.22, "plastic": 0.28, "metal": 0.12}
+# realistic mistakes for the "reviewed" demo items: (true material -> what the AI wrongly said)
+CONFUSIONS = {"plastic": ["metal", "paper"], "metal": ["plastic"], "paper": ["plastic", "organic"], "organic": ["paper"]}
 
 
 class Command(BaseCommand):
@@ -47,7 +49,7 @@ class Command(BaseCommand):
         Bin.objects.filter(api_key=DEMO_KEY).delete()
         bin = Bin.objects.create(
             name="Smart Bin #1", location="University of Rwanda - Main Campus", api_key=DEMO_KEY,
-            firmware_main="1.0.0", firmware_cam="1.0.0", model_version="organic-inorganic-v1",
+            firmware_main="1.0.0", firmware_cam="1.0.0", model_version="waste4-mobilenetv2-128-v1",
             ip_main="192.168.1.50", ip_cam="192.168.1.51", wifi_rssi=-58,
             booted_at=now - timedelta(hours=5, minutes=12), last_seen=now, cam_last_seen=now,
         )
@@ -90,17 +92,24 @@ class Command(BaseCommand):
             hour = timezone.localtime(t).hour
             per_hour = 5 if 7 <= hour <= 20 else 1
             for _ in range(rnd.randint(per_hour - 1, per_hour + 1)):
-                cat = ORGANIC if rnd.random() < 0.6 else INORGANIC
+                label = rnd.choices(list(MATERIAL_SHARE), weights=list(MATERIAL_SHARE.values()))[0]
+                cat = BIN_OF[label]
                 conf = round(rnd.choice([rnd.uniform(0.8, 0.99)] * 9 + [rnd.uniform(0.5, 0.7)]), 3)
                 uncertain = conf < bin.min_confidence
                 dets.append(Detection(
                     bin=bin, created_at=t + timedelta(minutes=rnd.randint(0, 59)),
-                    label=rnd.choice(ORGANIC_LABELS if cat == ORGANIC else INORGANIC_LABELS),
-                    category=cat, confidence=conf, uncertain=uncertain,
-                    sorted_to=INORGANIC if uncertain else cat, inference_ms=rnd.randint(380, 620),
+                    label=label, category=cat, confidence=conf, uncertain=uncertain,
+                    sorted_to=INORGANIC if uncertain else cat, inference_ms=rnd.randint(280, 420),
                 ))
             t += timedelta(hours=1)
-        Detection.objects.bulk_create([d for d in dets if d.created_at <= now])
+        dets = [d for d in dets if d.created_at <= now]
+        # "teach the AI": a cleaner reviewed ~1 item in 6; the AI was right about 88 % of the time
+        for d in dets[::6]:
+            d.true_label = d.label
+            if rnd.random() < 0.12 or d.uncertain:
+                d.true_label = rnd.choice(CONFUSIONS[d.label])  # the AI was wrong: real material differs
+            d.reviewed_by, d.reviewed_at = cleaner, d.created_at + timedelta(hours=2)
+        Detection.objects.bulk_create(dets)
 
         BinCommand.objects.bulk_create([
             BinCommand(bin=bin, action="calibrate", status="done", created_by=admin,

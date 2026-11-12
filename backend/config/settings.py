@@ -133,3 +133,8 @@ LOGGING = {
     "handlers": {"console": {"class": "logging.StreamHandler"}},
     "loggers": {"bins": {"handlers": ["console"], "level": "INFO"}},
 }
+
+# AI model service (ml/serve_model.py) used by the "Test the AI" page
+AI_SERVICE_URL = os.getenv("AI_SERVICE_URL", "http://127.0.0.1:8500")
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024

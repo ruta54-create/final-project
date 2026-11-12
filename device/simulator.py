@@ -24,9 +24,11 @@ try:
 except ImportError:
     Image = None
 
-FIRMWARE = "sim-1.0.0"
-ORGANIC = {"fruit_peel": (240, 200, 40), "food_waste": (150, 95, 40), "leaves": (60, 150, 50), "vegetable": (220, 90, 30)}
-INORGANIC = {"plastic_bottle": (80, 160, 230), "can": (170, 170, 180), "plastic_bag": (240, 240, 240), "glass": (120, 200, 170)}
+FIRMWARE = "sim-2.0.0"
+MODEL_VERSION = "waste4-mobilenetv2-128-v1"
+# the 4 materials the AI recognises -> compartment (paper is biodegradable, so it goes to ORGANIC)
+BIN_OF = {"organic": "organic", "paper": "organic", "plastic": "inorganic", "metal": "inorganic"}
+SHARE = {"organic": 0.38, "paper": 0.22, "plastic": 0.28, "metal": 0.12}
 
 
 class Device:
@@ -56,29 +58,30 @@ class Device:
             return json.loads(r.read() or b"null")
 
 
-def fake_photo(label, category):
+def fake_photo(label):
     """Draw a simple 'object on a tray' picture like the ESP32-CAM would send."""
     if Image is None:
         return None
     img = Image.new("RGB", (320, 240), (225, 228, 232))
     d = ImageDraw.Draw(img)
     d.rectangle([20, 200, 300, 230], fill=(190, 194, 200))  # tray edge
-    color = (ORGANIC | INORGANIC).get(label, (150, 150, 150))
-    jitter = random.randint(-20, 20)
-    if label == "plastic_bottle":
-        d.rounded_rectangle([130 + jitter, 60, 190 + jitter, 200], 14, fill=color, outline=(40, 90, 160), width=3)
-        d.rectangle([148 + jitter, 40, 172 + jitter, 62], fill=(30, 80, 200))
-    elif label == "can":
-        d.rounded_rectangle([120 + jitter, 80, 200 + jitter, 200], 10, fill=color, outline=(90, 90, 100), width=3)
-        d.rectangle([120 + jitter, 120, 200 + jitter, 150], fill=(200, 30, 40))
-    elif label == "fruit_peel":
-        d.chord([70 + jitter, 60, 250 + jitter, 220], 200, 340, fill=color, outline=(150, 120, 20), width=3)
-    elif label == "leaves":
+    j = random.randint(-25, 25)
+    if label == "plastic":            # bottle with a cap
+        d.rounded_rectangle([130 + j, 60, 190 + j, 200], 14, fill=(80, 160, 230), outline=(40, 90, 160), width=3)
+        d.rectangle([148 + j, 40, 172 + j, 62], fill=(30, 80, 200))
+    elif label == "metal":            # drink can
+        d.rounded_rectangle([120 + j, 80, 200 + j, 200], 10, fill=(170, 170, 180), outline=(90, 90, 100), width=3)
+        d.rectangle([120 + j, 120, 200 + j, 150], fill=(200, 30, 40))
+    elif label == "paper":            # crumpled sheet with printed lines
+        d.polygon([(90 + j, 70), (230 + j, 60), (240 + j, 190), (85 + j, 200)], fill=(248, 246, 238), outline=(150, 150, 150))
+        for y in range(85, 185, 14):
+            d.line([(105 + j, y), (220 + j, y - 3)], fill=(120, 120, 140), width=2)
+    elif random.random() < 0.5:       # organic: banana peel
+        d.chord([70 + j, 60, 250 + j, 220], 200, 340, fill=(240, 200, 40), outline=(150, 120, 20), width=3)
+    else:                             # organic: leaves
         for i in range(4):
-            x = 90 + i * 35 + jitter
-            d.ellipse([x, 90 + i * 12, x + 70, 150 + i * 12], fill=color, outline=(30, 90, 30), width=2)
-    else:
-        d.ellipse([100 + jitter, 80, 220 + jitter, 200], fill=color, outline=(60, 60, 60), width=3)
+            x = 90 + i * 35 + j
+            d.ellipse([x, 90 + i * 12, x + 70, 150 + i * 12], fill=(60, 150, 50), outline=(30, 90, 30), width=2)
     buf = io.BytesIO()
     img.save(buf, "JPEG", quality=80)
     return buf.getvalue()
@@ -115,12 +118,12 @@ def main():
         return round((1 - dist[c] / depth[c]) * 100)
 
     def classify(forced=None):
-        cat = forced or ("organic" if random.random() < 0.6 else "inorganic")
-        label = random.choice(list(ORGANIC if cat == "organic" else INORGANIC))
+        label = random.choices(list(SHARE), weights=list(SHARE.values()))[0]
+        cat = BIN_OF[label]
         conf = round(random.uniform(0.55, 0.7) if random.random() < 0.12 else random.uniform(0.8, 0.99), 3)
         payload = {"label": label, "category": cat, "confidence": conf, "inference_ms": random.randint(380, 620),
-                   "firmware": FIRMWARE, "model_version": "organic-inorganic-v1"}
-        photo = fake_photo(label, cat)
+                   "firmware": FIRMWARE, "model_version": MODEL_VERSION}
+        photo = fake_photo(label)
         res = dev.request("POST", "/detection/", payload,
                           files={"image": ("capture.jpg", photo, "image/jpeg")} if photo else None)
         to = res["sorted_to"]

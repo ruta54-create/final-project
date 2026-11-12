@@ -227,6 +227,7 @@ String askCamera() {
           Serial.println("Camera: " + line);
           return comp == "organic" ? "organic" : "inorganic";
         }
+        if (line == "EMPTY") { Serial.println("Camera: tray is empty, nothing to sort"); return ""; }
         if (line.startsWith("ERR")) { Serial.println("Camera error: " + line); break; }
         line = "";
       } else {
@@ -244,6 +245,7 @@ void sortItem() {
   if (lidOpen && !lidHeld) setLid(false);              // close lid: steady light, safe hands
   delay(300);
   String comp = askCamera();
+  if (comp == "") return;                               // camera saw an empty tray: false trigger, don't tilt
   tilt(comp);
   beep(1, 40);
   unsigned long t = millis();

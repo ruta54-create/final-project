@@ -14,6 +14,13 @@ from django.utils import timezone
 ORGANIC, INORGANIC = "organic", "inorganic"
 COMPARTMENTS = [(ORGANIC, "Organic"), (INORGANIC, "Inorganic")]
 
+# The 4 materials the AI recognises and the compartment each one goes to
+MATERIALS = [("organic", "Organic (food, peels, leaves)"), ("paper", "Paper / cardboard"),
+             ("plastic", "Plastic"), ("metal", "Metal")]
+BIN_OF = {"organic": ORGANIC, "paper": ORGANIC, "plastic": INORGANIC, "metal": INORGANIC}
+# what a reviewer can answer: a material, or "other" (glass, textile... the AI was not trained for it)
+REVIEW_CHOICES = MATERIALS + [("other", "Other / not a known material")]
+
 ONLINE_TIMEOUT = timedelta(seconds=90)
 
 
@@ -115,8 +122,27 @@ class Detection(models.Model):
     inference_ms = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
 
+    # Human review ("teach the AI"): what the item really was. Used to measure real accuracy
+    # in the bin and exported as new training photos.
+    true_label = models.CharField(max_length=20, choices=REVIEW_CHOICES, blank=True, db_index=True)
+    reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
+                                    related_name="reviewed_detections")
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+
     class Meta:
         ordering = ["-created_at"]
+
+    @property
+    def is_correct(self):
+        """None = not reviewed yet."""
+        return None if not self.true_label else self.true_label == self.label
+
+    @property
+    def right_compartment(self):
+        """Did the item physically end up in the right compartment?"""
+        if not self.true_label:
+            return None
+        return BIN_OF.get(self.true_label, INORGANIC) == self.sorted_to
 
 
 class Command(models.Model):

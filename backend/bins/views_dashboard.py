@@ -1,17 +1,19 @@
 """API used by the React dashboard (logged-in users, session cookie)."""
 
 import csv
+import io
+import zipfile
 from collections import Counter, defaultdict
 from datetime import timedelta
 
-from django.db.models import Avg
+from django.db.models import Avg, F
 from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework import mixins, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import COMPARTMENTS, INORGANIC, ORGANIC, Alert, Bin, Collection, Command, Detection
+from .models import COMPARTMENTS, INORGANIC, ORGANIC, REVIEW_CHOICES, Alert, Bin, Collection, Command, Detection
 from .serializers import (
     AlertSerializer,
     BinSerializer,
@@ -20,7 +22,7 @@ from .serializers import (
     DetectionSerializer,
     ReadingSerializer,
 )
-from .services import alerts, prediction, recommendations
+from .services import alerts, model_quality, prediction, recommendations
 
 
 class IsStaffOrReadOnly(permissions.BasePermission):
@@ -150,6 +152,9 @@ class BinViewSet(viewsets.ModelViewSet):
             "per_day": [{"day": k, **v} for k, v in sorted(per_day.items())],
             "per_hour": per_hour,
             "top_labels": [{"label": k, "count": n} for k, n in Counter(d["label"] for d in dets).most_common(8)],
+            "model_quality": model_quality.quality(
+                bin.detections.filter(created_at__gte=since).exclude(true_label="").only(
+                    "label", "true_label", "sorted_to")),
             "collections": {
                 comp: {
                     "count": sum(1 for c in cols if c.compartment == comp),
@@ -199,6 +204,34 @@ class BinViewSet(viewsets.ModelViewSet):
         bin.save(update_fields=["api_key"])
         return Response({"api_key": bin.api_key})
 
+    @action(detail=True, url_path="training-photos")
+    def training_photos(self, request, pk=None):
+        """ZIP of reviewed photos in class folders -> unzip into ml/datasets/own/ and retrain the AI."""
+        if not request.user.is_staff:
+            return Response({"detail": "Only administrators can export training photos."}, status=403)
+        bin = self.get_object()
+        dets = bin.detections.exclude(true_label="").exclude(true_label="other").exclude(image="")
+        buf = io.BytesIO()
+        count = Counter()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+            for d in dets.iterator():
+                try:
+                    with d.image.open("rb") as f:
+                        z.writestr(f"{d.true_label}/bin{bin.id}_{d.id}.jpg", f.read())
+                    count[d.true_label] += 1
+                except (FileNotFoundError, OSError):
+                    continue  # photo deleted from disk: skip it
+            z.writestr("README.txt", (
+                "Photos from the Edge-AI Smart Dustbin camera, labelled by people on the dashboard.\n"
+                "Unzip this folder into  ml/datasets/own/  so you get ml/datasets/own/plastic/*.jpg etc., then run:\n"
+                "  ml\\.venv\\Scripts\\python ml\\prepare_dataset.py\n"
+                "  ml\\.venv\\Scripts\\python ml\\train_mobilenet.py\n\n"
+                f"Photos per class: {dict(count)}\n"))
+        resp = HttpResponse(buf.getvalue(), content_type="application/zip")
+        resp["Content-Disposition"] = f'attachment; filename="smartbin{bin.id}_training_photos.zip"'
+        resp["X-Photo-Count"] = str(sum(count.values()))
+        return resp
+
     @action(detail=True, url_path="export")
     def export(self, request, pk=None):
         bin = self.get_object()
@@ -239,9 +272,28 @@ class DetectionViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(category=p["category"])
         if p.get("uncertain") in ("1", "true"):
             qs = qs.filter(uncertain=True)
+        if p.get("reviewed") in ("0", "false"):
+            qs = qs.filter(true_label="")
+        elif p.get("reviewed") in ("1", "true"):
+            qs = qs.exclude(true_label="")
+        if p.get("wrong") in ("1", "true"):
+            qs = qs.exclude(true_label="").exclude(true_label=F("label"))
         if p.get("days"):
             qs = qs.filter(created_at__gte=timezone.now() - timedelta(days=int_param(self.request, "days", 7, 1, 365)))
         return qs
+
+    @action(detail=True, methods=["post"])
+    def review(self, request, pk=None):
+        """A person says what the item really was ("teach the AI"). Empty true_label = undo."""
+        det = self.get_object()
+        true_label = (request.data.get("true_label") or "").strip().lower()
+        if true_label and true_label not in dict(REVIEW_CHOICES):
+            return Response({"detail": "Unknown material.", "code": "invalid_material"}, status=400)
+        det.true_label = true_label
+        det.reviewed_by = request.user if true_label else None
+        det.reviewed_at = timezone.now() if true_label else None
+        det.save(update_fields=["true_label", "reviewed_by", "reviewed_at"])
+        return Response(DetectionSerializer(det, context={"request": request}).data)
 
 
 class AlertViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

@@ -1,0 +1,608 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2480" height="1754" viewBox="0 0 2480 1754" font-family="Arial, Helvetica, sans-serif">
+<defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#e9e9d6"/></pattern></defs>
+<rect width="2480" height="1754" fill="#fffff4"/><rect width="2480" height="1754" fill="url(#g)"/>
+<rect x="14" y="14" width="2452" height="1726" fill="none" stroke="#555" stroke-width="2"/>
+<text x="40" y="58" font-size="30" fill="#1a1a1a" text-anchor="start" font-weight="bold">EDGE-AI SMART DUSTBIN  -  HARDWARE SCHEMATIC</text>
+<text x="40" y="86" font-size="15" fill="#444" text-anchor="start" font-weight="normal">Organic / inorganic waste sorting with MobileNetV2 on ESP32-S3-CAM, fill-level, gas &amp; climate sensing, ESP32 main controller</text>
+<rect x="860" y="120" width="640" height="220" fill="none" stroke="#8b1a1a" stroke-width="1.4" stroke-dasharray="8 6" rx="6"/>
+<rect x="870" y="108" width="214" height="22" fill="#fffff4"/>
+<text x="878" y="124" font-size="14" fill="#8b1a1a" text-anchor="start" font-weight="bold">POWER SUPPLY 5 V / 3 A</text>
+<rect x="900" y="175" width="130" height="90" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="965.0" y="149" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">J1</text>
+<text x="965.0" y="166" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">DC JACK 5V 3A</text>
+<text x="965.0" y="283" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">adapter (servos need their own 5 V)</text>
+<line x1="1030" y1="203" x2="1066" y2="203" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1022" y="207.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">+5V</text>
+<text x="1062" y="198" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<line x1="1030" y1="235" x2="1066" y2="235" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1022" y="239.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="1062" y="230" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<line x1="1066" y1="203" x2="1226" y2="203" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<circle cx="1176" cy="203" r="4.5" fill="#00327a"/>
+<line x1="1226" y1="203" x2="1226" y2="185" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="1215" y1="185" x2="1237" y2="185" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="1226" y="179" font-size="13" fill="#c00000" text-anchor="middle" font-weight="bold">+5V</text>
+<line x1="1066" y1="235" x2="1296" y2="235" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<circle cx="1176" cy="235" r="4.5" fill="#00327a"/>
+<line x1="1296" y1="235" x2="1296" y2="249" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1284" y1="249" x2="1308" y2="249" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1288" y1="254" x2="1304" y2="254" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1292" y1="259" x2="1300" y2="259" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1176" y1="203" x2="1176" y2="227" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="1160" y1="227" x2="1192" y2="227" stroke="#8b1a1a" stroke-width="3" stroke-linecap="round"/>
+<path d="M 1160 241 Q 1176 233 1192 241" fill="none" stroke="#8b1a1a" stroke-width="3"/>
+<line x1="1176" y1="237" x2="1176" y2="263" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="1154" y="225" font-size="14" fill="#c00000" text-anchor="end" font-weight="bold">+</text>
+<text x="1152" y="257" font-size="11.5" fill="#00008b" text-anchor="end" font-weight="bold">C1 1000uF/16V</text>
+<line x1="1176" y1="263" x2="1176" y2="235" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="1150" y="324" font-size="11.5" fill="#555" text-anchor="start" font-weight="normal" font-style="italic">C1 absorbs the servo current spikes</text>
+<text x="1290" y="205" font-size="12" fill="#7a2020" text-anchor="start" font-weight="bold">Common GND for ALL boards,</text>
+<text x="1290" y="221" font-size="12" fill="#7a2020" text-anchor="start" font-weight="bold">sensors and servos</text>
+<rect x="860" y="390" width="640" height="600" fill="none" stroke="#8b1a1a" stroke-width="1.4" stroke-dasharray="8 6" rx="6"/>
+<rect x="870" y="378" width="151" height="22" fill="#fffff4"/>
+<text x="878" y="394" font-size="14" fill="#8b1a1a" text-anchor="start" font-weight="bold">MAIN CONTROLLER</text>
+<rect x="1020" y="450" width="320" height="410" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="1180.0" y="424" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">U1</text>
+<text x="1180.0" y="441" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">ESP32 DevKit V1 (ESP32-WROOM-32)</text>
+<text x="1180.0" y="878" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">Wi-Fi -&gt; Django dashboard (telemetry, commands)</text>
+<line x1="980" y1="478" x2="1020" y2="478" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="482.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">VIN (5V)</text>
+<text x="984" y="473" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">VIN</text>
+<line x1="980" y1="478" x2="958" y2="478" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="958" y1="467" x2="958" y2="489" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="952" y="483" font-size="13" fill="#c00000" text-anchor="end" font-weight="bold">+5V</text>
+<line x1="980" y1="510" x2="1020" y2="510" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="514.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GND</text>
+<text x="984" y="505" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">GND</text>
+<line x1="980" y1="510" x2="962" y2="510" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="962" y1="498" x2="962" y2="522" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="957" y1="502" x2="957" y2="518" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="952" y1="506" x2="952" y2="514" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="980" y1="542" x2="1020" y2="542" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="546.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">3V3 out</text>
+<text x="984" y="537" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">3V3</text>
+<line x1="980" y1="542" x2="958" y2="542" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="958" y1="531" x2="958" y2="553" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="952" y="547" font-size="13" fill="#c00000" text-anchor="end" font-weight="bold">+3V3</text>
+<line x1="980" y1="574" x2="1020" y2="574" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="578.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO5</text>
+<text x="984" y="569" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">5</text>
+<polygon points="980,574 970,563 890,563 890,585 970,585" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="894" y="579" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">TRIG_ORG</text>
+<line x1="980" y1="606" x2="1020" y2="606" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="610.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO18</text>
+<text x="984" y="601" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">18</text>
+<polygon points="980,606 970,595 890,595 890,617 970,617" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="894" y="611" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">ECHO_ORG</text>
+<line x1="980" y1="638" x2="1020" y2="638" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="642.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO19</text>
+<text x="984" y="633" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">19</text>
+<polygon points="980,638 970,627 890,627 890,649 970,649" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="894" y="643" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">TRIG_INO</text>
+<line x1="980" y1="670" x2="1020" y2="670" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="674.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO21</text>
+<text x="984" y="665" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">21</text>
+<polygon points="980,670 970,659 890,659 890,681 970,681" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="894" y="675" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">ECHO_INO</text>
+<line x1="980" y1="702" x2="1020" y2="702" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="706.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO22</text>
+<text x="984" y="697" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">22</text>
+<polygon points="980,702 970,691 881,691 881,713 970,713" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="885" y="707" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">TRIG_HAND</text>
+<line x1="980" y1="734" x2="1020" y2="734" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="738.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO23</text>
+<text x="984" y="729" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">23</text>
+<polygon points="980,734 970,723 881,723 881,745 970,745" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="885" y="739" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">ECHO_HAND</text>
+<line x1="980" y1="766" x2="1020" y2="766" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="770.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO34 (in)</text>
+<text x="984" y="761" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">34</text>
+<polygon points="980,766 970,755 908,755 908,777 970,777" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="912" y="771" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">IR_OUT</text>
+<line x1="980" y1="798" x2="1020" y2="798" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="802.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO35 ADC1</text>
+<text x="984" y="793" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">35</text>
+<polygon points="980,798 970,787 917,787 917,809 970,809" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="921" y="803" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">MQ_AO</text>
+<line x1="980" y1="830" x2="1020" y2="830" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1028" y="834.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO4</text>
+<text x="984" y="825" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">4</text>
+<polygon points="980,830 970,819 890,819 890,841 970,841" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="894" y="835" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">DHT_DATA</text>
+<line x1="1340" y1="478" x2="1380" y2="478" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="482.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO17 TX2</text>
+<text x="1376" y="473" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">17</text>
+<polygon points="1380,478 1390,467 1452,467 1452,489 1390,489" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1392" y="483" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">CAM_RX</text>
+<line x1="1340" y1="510" x2="1380" y2="510" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="514.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO16 RX2</text>
+<text x="1376" y="505" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">16</text>
+<polygon points="1380,510 1390,499 1452,499 1452,521 1390,521" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1392" y="515" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">CAM_TX</text>
+<line x1="1340" y1="542" x2="1380" y2="542" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="546.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO27</text>
+<text x="1376" y="537" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">27</text>
+<polygon points="1380,542 1390,531 1488,531 1488,553 1390,553" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1392" y="547" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">SERVO_TRAY</text>
+<line x1="1340" y1="574" x2="1380" y2="574" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="578.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO14</text>
+<text x="1376" y="569" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">14</text>
+<polygon points="1380,574 1390,563 1479,563 1479,585 1390,585" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1392" y="579" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">SERVO_LID</text>
+<line x1="1340" y1="606" x2="1380" y2="606" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="610.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO25</text>
+<text x="1376" y="601" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">25</text>
+<polygon points="1380,606 1390,595 1452,595 1452,617 1390,617" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1392" y="611" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">BUZZER</text>
+<line x1="1340" y1="638" x2="1380" y2="638" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="642.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO26</text>
+<text x="1376" y="633" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">26</text>
+<polygon points="1380,638 1390,627 1443,627 1443,649 1390,649" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1392" y="643" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">LED_G</text>
+<line x1="1340" y1="670" x2="1380" y2="670" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="674.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO33</text>
+<text x="1376" y="665" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">33</text>
+<polygon points="1380,670 1390,659 1443,659 1443,681 1390,681" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1392" y="675" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">LED_R</text>
+<line x1="1340" y1="702" x2="1380" y2="702" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="706.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO32</text>
+<text x="1376" y="697" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">32</text>
+<polygon points="1380,702 1390,691 1443,691 1443,713 1390,713" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1392" y="707" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">LED_B</text>
+<line x1="1340" y1="734" x2="1380" y2="734" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1332" y="738.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="1376" y="729" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">GND</text>
+<line x1="1380" y1="734" x2="1398" y2="734" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1398" y1="722" x2="1398" y2="746" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1403" y1="726" x2="1403" y2="742" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1408" y1="730" x2="1408" y2="738" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<rect x="1530" y="120" width="910" height="470" fill="none" stroke="#8b1a1a" stroke-width="1.4" stroke-dasharray="8 6" rx="6"/>
+<rect x="1540" y="108" width="187" height="22" fill="#fffff4"/>
+<text x="1548" y="124" font-size="14" fill="#8b1a1a" text-anchor="start" font-weight="bold">AI CAMERA (EDGE AI)</text>
+<rect x="1650" y="280" width="280" height="154" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="1790.0" y="254" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">U2</text>
+<text x="1790.0" y="271" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">ESP32-S3-CAM (OV2640, 8MB PSRAM)</text>
+<text x="1790.0" y="452" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">MobileNetV2 int8 128x128: organic / paper / plastic / metal</text>
+<line x1="1614" y1="308" x2="1650" y2="308" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1658" y="312.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO14 RX</text>
+<text x="1618" y="303" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">14</text>
+<polygon points="1614,308 1604,297 1542,297 1542,319 1604,319" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1546" y="313" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">CAM_RX</text>
+<line x1="1614" y1="340" x2="1650" y2="340" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1658" y="344.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GPIO21 TX</text>
+<text x="1618" y="335" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">21</text>
+<polygon points="1614,340 1604,329 1542,329 1542,351 1604,351" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1546" y="345" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">CAM_TX</text>
+<line x1="1614" y1="372" x2="1650" y2="372" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1658" y="376.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">5V</text>
+<text x="1618" y="367" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">5V</text>
+<line x1="1614" y1="372" x2="1592" y2="372" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="1592" y1="361" x2="1592" y2="383" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="1586" y="377" font-size="13" fill="#c00000" text-anchor="end" font-weight="bold">+5V</text>
+<line x1="1614" y1="404" x2="1650" y2="404" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1658" y="408.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">GND</text>
+<text x="1618" y="399" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">GND</text>
+<line x1="1614" y1="404" x2="1596" y2="404" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1596" y1="392" x2="1596" y2="416" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1591" y1="396" x2="1591" y2="412" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1586" y1="400" x2="1586" y2="408" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1930" y1="308" x2="1966" y2="308" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1922" y="312.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GPIO47</text>
+<text x="1962" y="303" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">47</text>
+<rect x="1790" y="352" width="110" height="34" rx="5" fill="#dfe7f3" stroke="#556" stroke-width="1.5"/>
+<circle cx="1845" cy="369" r="12" fill="#223" stroke="#999" stroke-width="2"/><circle cx="1845" cy="369" r="5" fill="#68a"/>
+<text x="1845" y="404" font-size="10.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">OV2640 camera</text>
+<line x1="1966" y1="308" x2="1981" y2="308" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="1981" y="300" width="40" height="16" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="2021" y1="308" x2="2036" y2="308" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="2001" y="332" font-size="11.5" fill="#00008b" text-anchor="middle" font-weight="bold">R14  220</text>
+<line x1="2036" y1="308" x2="2076" y2="308" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<circle cx="2056" cy="308" r="4.5" fill="#00327a"/>
+<line x1="2056" y1="308" x2="2056" y2="323" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="2048" y="323" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="2056" y1="363" x2="2056" y2="378" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="2070" y="348" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R15 10k</text>
+<line x1="2056" y1="378" x2="2056" y2="392" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2044" y1="392" x2="2068" y2="392" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2048" y1="397" x2="2064" y2="397" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2052" y1="402" x2="2060" y2="402" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<rect x="2112" y="280" width="120" height="82" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="2172.0" y="254" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">Q1</text>
+<text x="2172.0" y="271" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">IRLZ44N</text>
+<line x1="2076" y1="308" x2="2112" y2="308" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="2120" y="312.5" font-size="12.5" fill="#14148c" text-anchor="start" font-weight="normal">G</text>
+<text x="2080" y="303" font-size="10" fill="#7a2020" text-anchor="start" font-weight="normal">G</text>
+<line x1="2232" y1="308" x2="2268" y2="308" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="2224" y="312.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">D</text>
+<text x="2264" y="303" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">D</text>
+<line x1="2232" y1="336" x2="2268" y2="336" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="2224" y="340.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">S</text>
+<text x="2264" y="331" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">S</text>
+<line x1="2268" y1="336" x2="2286" y2="336" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2286" y1="324" x2="2286" y2="348" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2291" y1="328" x2="2291" y2="344" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2296" y1="332" x2="2296" y2="340" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2076" y1="308" x2="2076" y2="308" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2268" y1="308" x2="2308" y2="308" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2308" y1="308" x2="2308" y2="268" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="2282" y="228" width="52" height="40" rx="18" fill="#fff9c8" stroke="#8b1a1a" stroke-width="2"/>
+<text x="2308" y="253" font-size="11" fill="#7a2020" text-anchor="middle" font-weight="bold">LED</text>
+<line x1="2308" y1="228" x2="2308" y2="212" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2308" y1="212" x2="2308" y2="194" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="2297" y1="194" x2="2319" y2="194" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="2308" y="188" font-size="13" fill="#c00000" text-anchor="middle" font-weight="bold">+5V</text>
+<text x="2272" y="204" font-size="11.5" fill="#00008b" text-anchor="end" font-weight="bold">LS1 white LED ring</text>
+<text x="2272" y="219" font-size="11" fill="#555" text-anchor="end" font-weight="normal" font-style="italic">5 V, uniform light</text>
+<rect x="40" y="120" width="760" height="870" fill="none" stroke="#8b1a1a" stroke-width="1.4" stroke-dasharray="8 6" rx="6"/>
+<rect x="50" y="108" width="232" height="22" fill="#fffff4"/>
+<text x="58" y="124" font-size="14" fill="#8b1a1a" text-anchor="start" font-weight="bold">FILL LEVEL &amp; LID SENSORS</text>
+<rect x="110" y="180" width="150" height="202" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="185.0" y="154" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">U3</text>
+<text x="185.0" y="171" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">HC-SR04</text>
+<text x="185.0" y="400" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">organic compartment (in the lid)</text>
+<line x1="260" y1="208" x2="296" y2="208" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="212.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">VCC</text>
+<text x="292" y="203" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<line x1="296" y1="208" x2="318" y2="208" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="318" y1="197" x2="318" y2="219" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="324" y="213" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+5V</text>
+<line x1="260" y1="252" x2="296" y2="252" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="256.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">TRIG</text>
+<text x="292" y="247" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<polygon points="296,252 306,241 386,241 386,263 306,263" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="308" y="257" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">TRIG_ORG</text>
+<line x1="260" y1="296" x2="296" y2="296" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="300.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">ECHO</text>
+<text x="292" y="291" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">3</text>
+<line x1="260" y1="340" x2="296" y2="340" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="344.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="292" y="335" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">4</text>
+<line x1="296" y1="340" x2="314" y2="340" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="314" y1="328" x2="314" y2="352" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="319" y1="332" x2="319" y2="348" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="324" y1="336" x2="324" y2="344" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="296" y1="296" x2="311" y2="296" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="311" y="288" width="40" height="16" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="351" y1="296" x2="366" y2="296" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="331" y="320" font-size="11.5" fill="#00008b" text-anchor="middle" font-weight="bold">R1  1k</text>
+<circle cx="386" cy="296" r="4.5" fill="#00327a"/>
+<line x1="366" y1="296" x2="406" y2="296" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<polygon points="406,296 416,285 496,285 496,307 416,307" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="418" y="301" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">ECHO_ORG</text>
+<line x1="386" y1="296" x2="386" y2="311" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="378" y="311" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="386" y1="351" x2="386" y2="366" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="400" y="336" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R2 2k</text>
+<line x1="386" y1="366" x2="386" y2="380" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="374" y1="380" x2="398" y2="380" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="378" y1="385" x2="394" y2="385" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="382" y1="390" x2="390" y2="390" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<rect x="110" y="445" width="150" height="202" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="185.0" y="419" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">U4</text>
+<text x="185.0" y="436" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">HC-SR04</text>
+<text x="185.0" y="665" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">inorganic compartment (in the lid)</text>
+<line x1="260" y1="473" x2="296" y2="473" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="477.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">VCC</text>
+<text x="292" y="468" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<line x1="296" y1="473" x2="318" y2="473" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="318" y1="462" x2="318" y2="484" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="324" y="478" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+5V</text>
+<line x1="260" y1="517" x2="296" y2="517" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="521.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">TRIG</text>
+<text x="292" y="512" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<polygon points="296,517 306,506 386,506 386,528 306,528" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="308" y="522" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">TRIG_INO</text>
+<line x1="260" y1="561" x2="296" y2="561" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="565.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">ECHO</text>
+<text x="292" y="556" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">3</text>
+<line x1="260" y1="605" x2="296" y2="605" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="609.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="292" y="600" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">4</text>
+<line x1="296" y1="605" x2="314" y2="605" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="314" y1="593" x2="314" y2="617" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="319" y1="597" x2="319" y2="613" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="324" y1="601" x2="324" y2="609" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="296" y1="561" x2="311" y2="561" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="311" y="553" width="40" height="16" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="351" y1="561" x2="366" y2="561" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="331" y="585" font-size="11.5" fill="#00008b" text-anchor="middle" font-weight="bold">R3  1k</text>
+<circle cx="386" cy="561" r="4.5" fill="#00327a"/>
+<line x1="366" y1="561" x2="406" y2="561" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<polygon points="406,561 416,550 496,550 496,572 416,572" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="418" y="566" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">ECHO_INO</text>
+<line x1="386" y1="561" x2="386" y2="576" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="378" y="576" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="386" y1="616" x2="386" y2="631" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="400" y="601" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R4 2k</text>
+<line x1="386" y1="631" x2="386" y2="645" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="374" y1="645" x2="398" y2="645" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="378" y1="650" x2="394" y2="650" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="382" y1="655" x2="390" y2="655" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<rect x="110" y="710" width="150" height="202" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="185.0" y="684" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">U5</text>
+<text x="185.0" y="701" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">HC-SR04</text>
+<text x="185.0" y="930" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">hand sensor (touchless lid, front)</text>
+<line x1="260" y1="738" x2="296" y2="738" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="742.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">VCC</text>
+<text x="292" y="733" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<line x1="296" y1="738" x2="318" y2="738" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="318" y1="727" x2="318" y2="749" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="324" y="743" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+5V</text>
+<line x1="260" y1="782" x2="296" y2="782" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="786.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">TRIG</text>
+<text x="292" y="777" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<polygon points="296,782 306,771 395,771 395,793 306,793" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="308" y="787" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">TRIG_HAND</text>
+<line x1="260" y1="826" x2="296" y2="826" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="830.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">ECHO</text>
+<text x="292" y="821" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">3</text>
+<line x1="260" y1="870" x2="296" y2="870" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="874.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="292" y="865" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">4</text>
+<line x1="296" y1="870" x2="314" y2="870" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="314" y1="858" x2="314" y2="882" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="319" y1="862" x2="319" y2="878" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="324" y1="866" x2="324" y2="874" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="296" y1="826" x2="311" y2="826" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="311" y="818" width="40" height="16" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="351" y1="826" x2="366" y2="826" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="331" y="850" font-size="11.5" fill="#00008b" text-anchor="middle" font-weight="bold">R5  1k</text>
+<circle cx="386" cy="826" r="4.5" fill="#00327a"/>
+<line x1="366" y1="826" x2="406" y2="826" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<polygon points="406,826 416,815 505,815 505,837 416,837" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="418" y="831" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">ECHO_HAND</text>
+<line x1="386" y1="826" x2="386" y2="841" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="378" y="841" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="386" y1="881" x2="386" y2="896" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="400" y="866" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R6 2k</text>
+<line x1="386" y1="896" x2="386" y2="910" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="374" y1="910" x2="398" y2="910" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="378" y1="915" x2="394" y2="915" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="382" y1="920" x2="390" y2="920" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<text x="110" y="972" font-size="12" fill="#7a2020" text-anchor="start" font-weight="normal" font-style="italic">ECHO is 5 V: the 1k / 2k divider gives 3.3 V for the ESP32</text>
+<rect x="40" y="1030" width="1220" height="560" fill="none" stroke="#8b1a1a" stroke-width="1.4" stroke-dasharray="8 6" rx="6"/>
+<rect x="50" y="1018" width="259" height="22" fill="#fffff4"/>
+<text x="58" y="1034" font-size="14" fill="#8b1a1a" text-anchor="start" font-weight="bold">ITEM, GAS &amp; CLIMATE SENSORS</text>
+<rect x="110" y="1100" width="150" height="122" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="185.0" y="1074" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">U6</text>
+<text x="185.0" y="1091" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">IR FC-51</text>
+<text x="185.0" y="1240" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">item on the tray (LOW = present)</text>
+<line x1="260" y1="1128" x2="296" y2="1128" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="1132.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">VCC</text>
+<text x="292" y="1123" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<line x1="296" y1="1128" x2="318" y2="1128" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="318" y1="1117" x2="318" y2="1139" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="324" y="1133" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+3V3</text>
+<line x1="260" y1="1160" x2="296" y2="1160" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="1164.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="292" y="1155" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<line x1="296" y1="1160" x2="314" y2="1160" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="314" y1="1148" x2="314" y2="1172" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="319" y1="1152" x2="319" y2="1168" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="324" y1="1156" x2="324" y2="1164" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="260" y1="1192" x2="296" y2="1192" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="1196.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">OUT</text>
+<text x="292" y="1187" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">3</text>
+<polygon points="296,1192 306,1181 368,1181 368,1203 306,1203" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="308" y="1197" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">IR_OUT</text>
+<rect x="510" y="1100" width="150" height="122" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="585.0" y="1074" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">U7</text>
+<text x="585.0" y="1091" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">MQ-135</text>
+<text x="585.0" y="1240" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">gas / bad smell (organic side)</text>
+<line x1="660" y1="1128" x2="696" y2="1128" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="652" y="1132.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">VCC</text>
+<text x="692" y="1123" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<line x1="696" y1="1128" x2="718" y2="1128" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="718" y1="1117" x2="718" y2="1139" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="724" y="1133" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+5V</text>
+<line x1="660" y1="1160" x2="696" y2="1160" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="652" y="1164.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="692" y="1155" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<line x1="696" y1="1160" x2="714" y2="1160" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="714" y1="1148" x2="714" y2="1172" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="719" y1="1152" x2="719" y2="1168" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="724" y1="1156" x2="724" y2="1164" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="660" y1="1192" x2="696" y2="1192" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="652" y="1196.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">AO</text>
+<text x="692" y="1187" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">3</text>
+<line x1="696" y1="1192" x2="711" y2="1192" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="711" y="1184" width="40" height="16" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="751" y1="1192" x2="766" y2="1192" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="731" y="1216" font-size="11.5" fill="#00008b" text-anchor="middle" font-weight="bold">R7  10k</text>
+<circle cx="786" cy="1192" r="4.5" fill="#00327a"/>
+<line x1="766" y1="1192" x2="806" y2="1192" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<polygon points="806,1192 816,1181 869,1181 869,1203 816,1203" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="818" y="1197" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">MQ_AO</text>
+<line x1="786" y1="1192" x2="786" y2="1207" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="778" y="1207" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="786" y1="1247" x2="786" y2="1262" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="800" y="1232" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R8 20k</text>
+<line x1="786" y1="1262" x2="786" y2="1276" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="774" y1="1276" x2="798" y2="1276" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="778" y1="1281" x2="794" y2="1281" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="782" y1="1286" x2="790" y2="1286" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<rect x="110" y="1340" width="150" height="122" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="185.0" y="1314" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">U8</text>
+<text x="185.0" y="1331" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">DHT22</text>
+<text x="185.0" y="1480" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">temperature &amp; humidity</text>
+<line x1="260" y1="1368" x2="296" y2="1368" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="1372.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">VCC</text>
+<text x="292" y="1363" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<line x1="296" y1="1368" x2="318" y2="1368" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="318" y1="1357" x2="318" y2="1379" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="324" y="1373" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+3V3</text>
+<line x1="260" y1="1400" x2="296" y2="1400" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="1404.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">DATA</text>
+<text x="292" y="1395" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<line x1="260" y1="1432" x2="296" y2="1432" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="252" y="1436.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="292" y="1427" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">4</text>
+<line x1="296" y1="1432" x2="314" y2="1432" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="314" y1="1420" x2="314" y2="1444" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="319" y1="1424" x2="319" y2="1440" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="324" y1="1428" x2="324" y2="1436" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="296" y1="1400" x2="486" y2="1400" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<circle cx="416" cy="1400" r="4.5" fill="#00327a"/>
+<polygon points="486,1400 496,1389 576,1389 576,1411 496,1411" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="498" y="1405" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">DHT_DATA</text>
+<line x1="416" y1="1400" x2="416" y2="1360" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="416" y1="1290" x2="416" y2="1305" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="408" y="1305" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="416" y1="1345" x2="416" y2="1360" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="430" y="1330" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R9 10k</text>
+<line x1="416" y1="1290" x2="416" y2="1272" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="405" y1="1272" x2="427" y2="1272" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="416" y="1266" font-size="13" fill="#c00000" text-anchor="middle" font-weight="bold">+3V3</text>
+<text x="510" y="1305" font-size="12" fill="#7a2020" text-anchor="start" font-weight="normal" font-style="italic">AO up to 5 V: 10k / 20k divider -&gt; max 3.3 V on GPIO35</text>
+<rect x="1300" y="1030" width="1140" height="560" fill="none" stroke="#8b1a1a" stroke-width="1.4" stroke-dasharray="8 6" rx="6"/>
+<rect x="1310" y="1018" width="214" height="22" fill="#fffff4"/>
+<text x="1318" y="1034" font-size="14" fill="#8b1a1a" text-anchor="start" font-weight="bold">ACTUATORS &amp; INDICATORS</text>
+<rect x="1360" y="1100" width="160" height="122" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="1440.0" y="1074" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">M1</text>
+<text x="1440.0" y="1091" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">MG996R SERVO</text>
+<text x="1440.0" y="1240" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">sorting tray: 30 / 90 / 150 deg</text>
+<line x1="1520" y1="1128" x2="1556" y2="1128" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1512" y="1132.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">SIG</text>
+<text x="1552" y="1123" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<polygon points="1556,1128 1566,1117 1664,1117 1664,1139 1566,1139" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1568" y="1133" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">SERVO_TRAY</text>
+<line x1="1520" y1="1160" x2="1556" y2="1160" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1512" y="1164.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">+5V</text>
+<text x="1552" y="1155" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<line x1="1556" y1="1160" x2="1578" y2="1160" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="1578" y1="1149" x2="1578" y2="1171" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="1584" y="1165" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+5V</text>
+<line x1="1520" y1="1192" x2="1556" y2="1192" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1512" y="1196.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="1552" y="1187" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">3</text>
+<line x1="1556" y1="1192" x2="1574" y2="1192" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1574" y1="1180" x2="1574" y2="1204" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1579" y1="1184" x2="1579" y2="1200" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1584" y1="1188" x2="1584" y2="1196" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<rect x="1360" y="1300" width="160" height="122" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="1440.0" y="1274" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">M2</text>
+<text x="1440.0" y="1291" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">MG996R SERVO</text>
+<text x="1440.0" y="1440" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">lid: 0 / 100 deg</text>
+<line x1="1520" y1="1328" x2="1556" y2="1328" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1512" y="1332.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">SIG</text>
+<text x="1552" y="1323" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">1</text>
+<polygon points="1556,1328 1566,1317 1655,1317 1655,1339 1566,1339" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1568" y="1333" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">SERVO_LID</text>
+<line x1="1520" y1="1360" x2="1556" y2="1360" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1512" y="1364.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">+5V</text>
+<text x="1552" y="1355" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">2</text>
+<line x1="1556" y1="1360" x2="1578" y2="1360" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="1578" y1="1349" x2="1578" y2="1371" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="1584" y="1365" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+5V</text>
+<line x1="1520" y1="1392" x2="1556" y2="1392" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1512" y="1396.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">GND</text>
+<text x="1552" y="1387" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">3</text>
+<line x1="1556" y1="1392" x2="1574" y2="1392" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1574" y1="1380" x2="1574" y2="1404" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1579" y1="1384" x2="1579" y2="1400" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1584" y1="1388" x2="1584" y2="1396" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<rect x="1760" y="1100" width="130" height="90" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2.4"/>
+<text x="1825.0" y="1074" font-size="15" fill="#00008b" text-anchor="middle" font-weight="bold">BZ1</text>
+<text x="1825.0" y="1091" font-size="13" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">BUZZER 5V</text>
+<text x="1825.0" y="1208" font-size="11.5" fill="#555" text-anchor="middle" font-weight="normal" font-style="italic">active buzzer</text>
+<line x1="1890" y1="1128" x2="1926" y2="1128" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1882" y="1132.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">+</text>
+<text x="1922" y="1123" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">+</text>
+<polygon points="1926,1128 1936,1117 1998,1117 1998,1139 1936,1139" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1938" y="1133" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">BUZZER</text>
+<line x1="1890" y1="1160" x2="1926" y2="1160" stroke="#8b1a1a" stroke-width="2" stroke-linecap="round"/>
+<text x="1882" y="1164.5" font-size="12.5" fill="#14148c" text-anchor="end" font-weight="normal">-</text>
+<text x="1922" y="1155" font-size="10" fill="#7a2020" text-anchor="end" font-weight="normal">-</text>
+<line x1="1926" y1="1160" x2="1944" y2="1160" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1944" y1="1148" x2="1944" y2="1172" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1949" y1="1152" x2="1949" y2="1168" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1954" y1="1156" x2="1954" y2="1164" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<polygon points="1840,1300 1830,1289 1777,1289 1777,1311 1830,1311" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1781" y="1305" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">LED_G</text>
+<line x1="1840" y1="1300" x2="1870" y2="1300" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="1870" y1="1300" x2="1870" y2="1310" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="1870" y1="1310" x2="1870" y2="1325" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="1862" y="1325" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="1870" y1="1365" x2="1870" y2="1380" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="1884" y="1350" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R10 220</text>
+<line x1="1870" y1="1380" x2="1870" y2="1396" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<polygon points="1858,1396 1882,1396 1870,1418" fill="#2fbf4f" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="1858" y1="1418" x2="1882" y2="1418" stroke="#8b1a1a" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="1870" y1="1418" x2="1870" y2="1440" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="1885" y1="1400" x2="1896" y2="1392" stroke="#2fbf4f" stroke-width="2" stroke-linecap="round"/>
+<line x1="1885" y1="1409" x2="1896" y2="1401" stroke="#2fbf4f" stroke-width="2" stroke-linecap="round"/>
+<text x="1888" y="1434" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">D1 </text>
+<text x="1870" y="1492" font-size="11.5" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">green: OK</text>
+<line x1="1870" y1="1440" x2="1870" y2="1454" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1858" y1="1454" x2="1882" y2="1454" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1862" y1="1459" x2="1878" y2="1459" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="1866" y1="1464" x2="1874" y2="1464" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<polygon points="2030,1300 2020,1289 1967,1289 1967,1311 2020,1311" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="1971" y="1305" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">LED_R</text>
+<line x1="2030" y1="1300" x2="2060" y2="1300" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2060" y1="1300" x2="2060" y2="1310" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2060" y1="1310" x2="2060" y2="1325" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="2052" y="1325" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="2060" y1="1365" x2="2060" y2="1380" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="2074" y="1350" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R11 220</text>
+<line x1="2060" y1="1380" x2="2060" y2="1396" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<polygon points="2048,1396 2072,1396 2060,1418" fill="#e53935" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="2048" y1="1418" x2="2072" y2="1418" stroke="#8b1a1a" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="2060" y1="1418" x2="2060" y2="1440" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2075" y1="1400" x2="2086" y2="1392" stroke="#e53935" stroke-width="2" stroke-linecap="round"/>
+<line x1="2075" y1="1409" x2="2086" y2="1401" stroke="#e53935" stroke-width="2" stroke-linecap="round"/>
+<text x="2078" y="1434" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">D2 </text>
+<text x="2060" y="1492" font-size="11.5" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">red: full</text>
+<line x1="2060" y1="1440" x2="2060" y2="1454" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2048" y1="1454" x2="2072" y2="1454" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2052" y1="1459" x2="2068" y2="1459" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2056" y1="1464" x2="2064" y2="1464" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<polygon points="2220,1300 2210,1289 2157,1289 2157,1311 2210,1311" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="2161" y="1305" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">LED_B</text>
+<line x1="2220" y1="1300" x2="2250" y2="1300" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2250" y1="1300" x2="2250" y2="1310" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2250" y1="1310" x2="2250" y2="1325" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<rect x="2242" y="1325" width="16" height="40" fill="#ffffc4" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="2250" y1="1365" x2="2250" y2="1380" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<text x="2264" y="1350" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">R12 220</text>
+<line x1="2250" y1="1380" x2="2250" y2="1396" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<polygon points="2238,1396 2262,1396 2250,1418" fill="#2f6fe0" stroke="#8b1a1a" stroke-width="2"/>
+<line x1="2238" y1="1418" x2="2262" y2="1418" stroke="#8b1a1a" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="2250" y1="1418" x2="2250" y2="1440" stroke="#00327a" stroke-width="2" stroke-linecap="round"/>
+<line x1="2265" y1="1400" x2="2276" y2="1392" stroke="#2f6fe0" stroke-width="2" stroke-linecap="round"/>
+<line x1="2265" y1="1409" x2="2276" y2="1401" stroke="#2f6fe0" stroke-width="2" stroke-linecap="round"/>
+<text x="2268" y="1434" font-size="11.5" fill="#00008b" text-anchor="start" font-weight="bold">D3 </text>
+<text x="2250" y="1492" font-size="11.5" fill="#333" text-anchor="middle" font-weight="normal" font-style="italic">blue: maint.</text>
+<line x1="2250" y1="1440" x2="2250" y2="1454" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2238" y1="1454" x2="2262" y2="1454" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2242" y1="1459" x2="2258" y2="1459" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="2246" y1="1464" x2="2254" y2="1464" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<rect x="1840" y="1604" width="610" height="126" fill="#fffde6" stroke="#555" stroke-width="2"/>
+<line x1="1840" y1="1646" x2="2450" y2="1646" stroke="#555" stroke-width="1.2" stroke-linecap="round"/>
+<line x1="1840" y1="1688" x2="2450" y2="1688" stroke="#555" stroke-width="1.2" stroke-linecap="round"/>
+<line x1="2220" y1="1646" x2="2220" y2="1730" stroke="#555" stroke-width="1.2" stroke-linecap="round"/>
+<text x="1852" y="1632" font-size="16" fill="#000" text-anchor="start" font-weight="bold">TITLE: Edge-AI Smart Dustbin - Main Schematic</text>
+<text x="1852" y="1672" font-size="13" fill="#000" text-anchor="start" font-weight="normal">PROJECT: final-project (ruta54-create)</text>
+<text x="2232" y="1672" font-size="13" fill="#000" text-anchor="start" font-weight="normal">DATE: 12/11/2026</text>
+<text x="1852" y="1714" font-size="13" fill="#000" text-anchor="start" font-weight="normal">SHEET 1 / 1      REV 2.0      ESP32 + ESP32-S3-CAM</text>
+<text x="2232" y="1714" font-size="12" fill="#555" text-anchor="start" font-weight="normal" font-style="italic">Proteus-style, net-label wiring</text>
+<rect x="40" y="1614" width="1080" height="112" fill="#ffffff" stroke="#bbb" rx="6"/>
+<text x="56" y="1640" font-size="14" fill="#000" text-anchor="start" font-weight="bold">HOW TO READ</text>
+<polygon points="70,1670 80,1659 160,1659 160,1681 80,1681" fill="#eef4ff" stroke="#00327a" stroke-width="1.3"/>
+<text x="82" y="1675" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">TRIG_ORG</text>
+<text x="200" y="1675" font-size="12.5" fill="#000" text-anchor="start" font-weight="normal">net label: all pins with the same name are connected (as in Proteus ISIS)</text>
+<line x1="58" y1="1706" x2="80" y2="1706" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="80" y1="1695" x2="80" y2="1717" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="86" y="1711" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+5V</text>
+<text x="150" y="1711" font-size="12.5" fill="#000" text-anchor="start" font-weight="normal">5 V rail</text>
+<line x1="250" y1="1706" x2="272" y2="1706" stroke="#c00000" stroke-width="2" stroke-linecap="round"/>
+<line x1="272" y1="1695" x2="272" y2="1717" stroke="#c00000" stroke-width="3" stroke-linecap="round"/>
+<text x="278" y="1711" font-size="13" fill="#c00000" text-anchor="start" font-weight="bold">+3V3</text>
+<text x="350" y="1711" font-size="12.5" fill="#000" text-anchor="start" font-weight="normal">3.3 V from U1</text>
+<line x1="480" y1="1706" x2="498" y2="1706" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="498" y1="1694" x2="498" y2="1718" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="503" y1="1698" x2="503" y2="1714" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<line x1="508" y1="1702" x2="508" y2="1710" stroke="#222222" stroke-width="2" stroke-linecap="round"/>
+<text x="530" y="1711" font-size="12.5" fill="#000" text-anchor="start" font-weight="normal">common ground</text>
+<text x="680" y="1711" font-size="12.5" fill="#00327a" text-anchor="start" font-weight="bold">UART 115200: U1 TX2 -&gt; U2 RX, U2 TX -&gt; U1 RX2</text>
+</svg>

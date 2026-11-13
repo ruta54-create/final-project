@@ -249,6 +249,27 @@ teach-the-AI loop (section 9) adds your own photos. Measure it on *Analytics →
   look alike. Add your own photos of both (section 5).
 * **Organic** is recognised best: food has unique colours and textures.
 
+### Verify it yourself in Google Colab
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruta54-create/final-project/blob/main/ml/verify_model_colab.ipynb)
+
+`ml/verify_model_colab.ipynb` downloads this repository and tests the **same int8 file** that goes on the ESP32.
+Open it, then *Runtime → Run all* (about 3 minutes, no GPU). Result of the last run:
+
+| Check | Result |
+|---|---|
+| Model health (int8, 128×128, labels, 609 KB) | PASS |
+| Only TensorFlow Lite Micro operations (67 ops, 7 kinds) | PASS |
+| Material accuracy, 709 test photos | 84.8 % (model card 83.8 %) |
+| Right compartment | 91.3 % |
+| Plastic/metal ending up in the compost (with the 70 % rule) | 0.8 % |
+| Darker, brighter, blur, rotation, low JPEG quality | compartment ≥ 85.5 % in all: PASS |
+| Item small in the picture | 79.7 %: **WARNING**. Mount the camera so one item fills the picture. |
+| Speed on a PC | about 3 ms per photo |
+| **Verdict** | **14 passed, 1 warning, 0 failed: model verified** |
+
+The last cells let you upload your own photos or use the webcam.
+
 ---
 
 ## 9. The "teach the AI" loop (new feature)

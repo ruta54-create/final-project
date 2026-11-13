@@ -68,6 +68,7 @@ everything from a web dashboard** in English, French or Kinyarwanda.
 | **Edge AI sorting** | ESP32-S3-CAM runs a MobileNetV2 (int8, 600 KB) that recognises **organic, paper, plastic, metal**: organic + paper → organic compartment, plastic + metal → inorganic. Unsure items (< 70 %) go to *inorganic*. |
 | **Own trained model** | Trained on RealWaste + TrashNet on a laptop CPU in minutes (`ml/`); see [docs/DATASET_GUIDE.md](docs/DATASET_GUIDE.md) and `ml/output/MODEL_CARD.md`. |
 | **Test the AI (no hardware)** | Dashboard page: sample photos, upload or webcam → the same int8 model as the ESP32 → compartment decision; can send the result to the dashboard as a detection. |
+| **Verify the model in Google Colab** | [ml/verify_model_colab.ipynb](https://colab.research.google.com/github/ruta54-create/final-project/blob/main/ml/verify_model_colab.ipynb) checks the int8 model on 709 held-out photos: accuracy, confusion matrix, mistakes, robustness, ESP32 compatibility, speed, PASS/FAIL verdict, plus your own photos or webcam. |
 | **Teach the AI** | People confirm or correct each photo on the dashboard → real-world accuracy + confusion matrix → export checked photos → retrain. |
 | **Fill levels** | Ultrasonic sensor above each compartment → % full, every 30 s (median of 5 readings). |
 | **Prediction (ML)** | Linear-regression filling rate → "organic full in 6 h (tomorrow 04:30)". |
@@ -150,6 +151,8 @@ final-project/
 │   ├── prepare_dataset.py          RealWaste + TrashNet + own photos → 4 balanced classes
 │   ├── train_mobilenet.py          MobileNetV2 transfer learning + int8 export for the ESP32
 │   ├── serve_model.py              AI service for the dashboard's "Test the AI" page
+│   ├── verify_model_colab.ipynb    Google Colab notebook that verifies the model (Runtime → Run all)
+│   ├── test_set/                   709 held-out test photos (never used in training)
 │   ├── requirements.txt
 │   └── output/                     model_int8.tflite, model_data.h, MODEL_CARD.md, charts
 │

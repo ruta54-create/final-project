@@ -1,113 +1,225 @@
 {
   "float32": {
-    "accuracy": 0.8547,
-    "compartment_accuracy": 0.9097,
+    "accuracy": 0.865,
+    "compartment_accuracy": 0.9181,
     "per_class": {
       "organic": {
-        "precision": 0.959,
+        "precision": 0.953,
+        "recall": 0.92,
+        "f1": 0.936,
+        "support": 286
+      },
+      "paper": {
+        "precision": 0.88,
+        "recall": 0.836,
+        "f1": 0.858,
+        "support": 299
+      },
+      "plastic": {
+        "precision": 0.803,
+        "recall": 0.84,
+        "f1": 0.821,
+        "support": 300
+      },
+      "metal": {
+        "precision": 0.836,
+        "recall": 0.867,
+        "f1": 0.851,
+        "support": 300
+      }
+    },
+    "confusion_matrix": [
+      [
+        263,
+        9,
+        8,
+        6
+      ],
+      [
+        2,
+        250,
+        28,
+        19
+      ],
+      [
+        6,
+        16,
+        252,
+        26
+      ],
+      [
+        5,
+        9,
+        26,
+        260
+      ]
+    ]
+  },
+  "int8": {
+    "accuracy": 0.8591,
+    "compartment_accuracy": 0.9131,
+    "per_class": {
+      "organic": {
+        "precision": 0.941,
+        "recall": 0.941,
+        "f1": 0.941,
+        "support": 286
+      },
+      "paper": {
+        "precision": 0.832,
+        "recall": 0.863,
+        "f1": 0.847,
+        "support": 299
+      },
+      "plastic": {
+        "precision": 0.821,
+        "recall": 0.793,
+        "f1": 0.807,
+        "support": 300
+      },
+      "metal": {
+        "precision": 0.846,
+        "recall": 0.843,
+        "f1": 0.845,
+        "support": 300
+      }
+    },
+    "confusion_matrix": [
+      [
+        269,
+        8,
+        6,
+        3
+      ],
+      [
+        4,
+        258,
+        21,
+        16
+      ],
+      [
+        7,
+        28,
+        238,
+        27
+      ],
+      [
+        6,
+        16,
+        25,
+        253
+      ]
+    ]
+  },
+  "int8_benchmark_v1": {
+    "accuracy": 0.866,
+    "compartment_accuracy": 0.9281,
+    "per_class": {
+      "organic": {
+        "precision": 0.927,
         "recall": 0.97,
-        "f1": 0.965,
+        "f1": 0.948,
         "support": 169
       },
       "paper": {
-        "precision": 0.918,
-        "recall": 0.744,
-        "f1": 0.822,
+        "precision": 0.89,
+        "recall": 0.856,
+        "f1": 0.873,
         "support": 180
       },
       "plastic": {
-        "precision": 0.782,
-        "recall": 0.839,
-        "f1": 0.81,
+        "precision": 0.825,
+        "recall": 0.783,
+        "f1": 0.803,
         "support": 180
       },
       "metal": {
-        "precision": 0.789,
-        "recall": 0.872,
-        "f1": 0.828,
+        "precision": 0.824,
+        "recall": 0.861,
+        "f1": 0.842,
         "support": 180
       }
     },
     "confusion_matrix": [
       [
         164,
-        0,
-        4,
+        2,
+        2,
         1
       ],
       [
-        3,
-        134,
-        24,
-        19
+        4,
+        154,
+        12,
+        10
       ],
       [
-        2,
-        5,
-        151,
+        6,
+        11,
+        141,
         22
       ],
       [
-        2,
-        7,
-        14,
-        157
+        3,
+        6,
+        16,
+        155
       ]
     ]
   },
-  "int8": {
-    "accuracy": 0.8378,
-    "compartment_accuracy": 0.9055,
+  "float32_benchmark_v1": {
+    "accuracy": 0.8801,
+    "compartment_accuracy": 0.9323,
     "per_class": {
       "organic": {
-        "precision": 0.937,
-        "recall": 0.964,
-        "f1": 0.95,
+        "precision": 0.948,
+        "recall": 0.97,
+        "f1": 0.959,
         "support": 169
       },
       "paper": {
-        "precision": 0.878,
-        "recall": 0.761,
-        "f1": 0.815,
+        "precision": 0.92,
+        "recall": 0.828,
+        "f1": 0.871,
         "support": 180
       },
       "plastic": {
-        "precision": 0.793,
-        "recall": 0.767,
-        "f1": 0.78,
+        "precision": 0.82,
+        "recall": 0.833,
+        "f1": 0.826,
         "support": 180
       },
       "metal": {
-        "precision": 0.761,
-        "recall": 0.867,
-        "f1": 0.81,
+        "precision": 0.843,
+        "recall": 0.894,
+        "f1": 0.868,
         "support": 180
       }
     },
     "confusion_matrix": [
       [
-        163,
-        1,
-        4,
-        1
-      ],
-      [
-        5,
-        137,
-        19,
-        19
-      ],
-      [
-        4,
-        9,
-        138,
-        29
+        164,
+        3,
+        0,
+        2
       ],
       [
         2,
-        9,
+        149,
+        20,
+        9
+      ],
+      [
+        5,
+        6,
+        150,
+        19
+      ],
+      [
+        2,
+        4,
         13,
-        156
+        161
       ]
     ]
   },
@@ -132,8 +244,8 @@
   "model": "MobileNetV2 alpha=0.35",
   "params": 415332,
   "tflite_bytes": 623480,
-  "laptop_int8_ms_per_image": 3.07,
-  "train_minutes": 15.4,
-  "training_images": 2410,
-  "test_images": 709
+  "laptop_int8_ms_per_image": 1.86,
+  "train_minutes": 23.0,
+  "training_images": 4035,
+  "test_images": 1185
 }

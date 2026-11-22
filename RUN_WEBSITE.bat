@@ -53,10 +53,35 @@ if errorlevel 1 goto :error
 :run
 REM ---- 4. Start
 if /i "%MODE%"=="demo" start "Smart bin simulator" "%PY%" "%~dp0device\simulator.py"
-REM AI model service for the "Test the AI" page (needs the ml environment: see docs/DATASET_GUIDE.md)
 set "MLPY=%~dp0ml\.venv\Scripts\python.exe"
-if exist "%MLPY%" if exist "%~dp0ml\output\model_int8.tflite" start "AI model service" "%MLPY%" "%~dp0ml\serve_model.py"
-if not exist "%MLPY%" echo     (AI test page off: create the ml environment, see docs/DATASET_GUIDE.md section 4)
+if not exist "%MLPY%" goto :ai_no_python
+if not exist "%~dp0ml\output\model_int8.tflite" goto :ai_no_model
+where curl.exe >nul 2>nul
+if errorlevel 1 goto :ai_no_curl
+curl.exe --silent --fail --max-time 1 http://127.0.0.1:8500/health >nul 2>nul
+if not errorlevel 1 goto :ai_ready
+echo Starting the AI model service; first startup can take a minute...
+start "AI model service" "%MLPY%" -u "%~dp0ml\serve_model.py"
+for /L %%i in (1,1,90) do (
+    curl.exe --silent --fail --max-time 1 http://127.0.0.1:8500/health >nul 2>nul
+    if not errorlevel 1 goto :ai_ready
+    ping -n 3 127.0.0.1 >nul
+)
+echo WARNING: AI model service did not become ready. Check its "AI model service" window for errors.
+goto :ai_done
+:ai_no_curl
+echo WARNING: curl.exe is unavailable; starting the AI service without a readiness check.
+start "AI model service" "%MLPY%" -u "%~dp0ml\serve_model.py"
+goto :ai_done
+:ai_no_python
+echo     (AI test page off: create ml\.venv with Python 3.12; see docs/DATASET_GUIDE.md section 4)
+goto :ai_done
+:ai_no_model
+echo     (AI test page off: ml\output\model_int8.tflite is missing; see docs/DATASET_GUIDE.md)
+goto :ai_done
+:ai_ready
+echo AI model service is ready.
+:ai_done
 echo.
 echo [4/4] Server running. KEEP THIS WINDOW OPEN. Press CTRL+C to stop.
 echo.

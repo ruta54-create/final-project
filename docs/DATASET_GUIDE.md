@@ -54,31 +54,65 @@ Public datasets give the AI a good start. Your own photos (section 5) make it wo
 |---|---|---|---|---|---|
 | **RealWaste** (UCI ML Repository, 2023) | 4,752 | Cardboard, Paper → **paper** · Food Organics, Vegetation → **organic** · Plastic → **plastic** · Metal → **metal** | Glass, Textile Trash, Miscellaneous Trash | real waste from a landfill, 524×524, varied backgrounds | CC BY 4.0 |
 | **TrashNet / "Garbage Classification"** (Thung & Yang, Stanford 2016) | 2,527 | cardboard, paper → **paper** · plastic → **plastic** · metal → **metal** | glass, trash | one object on a white board, 512×384 | MIT |
-| *Optional:* **Garbage Classification 12 classes** (Kaggle, mostafaabla) | 15,150 | biological → **organic** · cardboard, paper · plastic · metal | glass, clothes, shoes, battery, trash | web photos | ODbL |
+| **Recyclable and Household Waste** (Kaggle, A. King) | 15,000 (8,747 recovered, see below) | food waste, eggshells → **organic** · newspaper, cardboard boxes/packaging → **paper** · shopping bags, soda bottles, cutlery → **plastic** · soda cans, food tins → **metal** | glass, clothing, shoes; office paper, magazines, coffee grounds, aerosol cans (photos mostly not the object, checked by eye); paper cups (plastic-lined) | web stock photos, 256×256 PNG, **many repeats** (1,164 identical + 565 near-identical removed) | Kaggle: MIT; data card: educational/research use |
+| *Tested, not used:* **Garbage Dataset v2** (Kaggle, S. Kunwar) | 13,348 (complete download) | biological → organic and paper, plastic, metal were **tested** (see experiments below) | cardboard (≈⅓ drink cartons), battery, glass, clothes, shoes, trash | food: stock/market photos; paper/plastic/metal: real phone photos | MIT |
 
 Download links:
 * RealWaste: https://archive.ics.uci.edu/dataset/908/realwaste → *Download* (`realwaste.zip`, 690 MB)
 * TrashNet: https://huggingface.co/datasets/garythung/trashnet → `dataset-resized.zip` (43 MB)
-* Kaggle 12 classes (needs a free Kaggle account): https://www.kaggle.com/datasets/mostafaabla/garbage-classification
+* King (needs a free Kaggle account): https://www.kaggle.com/datasets/alistairking/recyclable-and-household-waste-classification → *Download dataset as zip* (965 MB) → `king.zip`
+* GD v2 (needs a free Kaggle account): https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2 → `gdv2.zip`
 
-Put the zip files in **`ml/datasets/raw/`**. You don't need to unzip them.
+Put RealWaste and TrashNet in **`ml/datasets/raw/`**, King and GD v2 in **`ml/datasets/raw_external/`**. You don't need
+to unzip them. **Wait until the browser has finished the download**: the first King download was cut off at 505 of
+965 MB. Complete images were recovered with `ml
+ecover_zip.py` into `raw_external/king/` (two cut-off downloads, 11,711
+images, all folders up to *plastic trash bags*). Still missing: water bottles, steel food cans, styrofoam, tea bags.
+The full check of every dataset, and why some were rejected, is in **[DATASET_AUDIT.md](DATASET_AUDIT.md)**.
 
 **Please cite** in your report:
 * S. Single, S. Iranmanesh, R. Raad, "RealWaste: A Novel Real-Life Data Set for Landfill Waste Classification
   Using Deep Learning", *Information*, 14(12), 633, 2023.
 * G. Thung, M. Yang, "Classification of Trash for Recyclability Status", CS229 project report, Stanford, 2016.
 
-### What we actually used (after cleaning)
+### What we actually used (after cleaning), dataset v2
 
-`ml/prepare_dataset.py` centre-crops every photo to a square, removes duplicates, and balances the classes:
+`ml/prepare_dataset.py` centre-crops every photo to a square, removes duplicates (also across datasets), and
+balances every class **by subtype**, so no single kind of object dominates a class:
 
-| Class | Compartment | Training | Test | Sources |
-|---|---|---|---|---|
-| organic | organic | 675 | 169 | RealWaste 844 (TrashNet has no food) |
-| paper | organic | 720 | 180 | TrashNet 470 · RealWaste 430 |
-| plastic | inorganic | 720 | 180 | RealWaste 597 · TrashNet 303 |
-| metal | inorganic | 720 | 180 | RealWaste 603 · TrashNet 297 |
-| **total** | | **2,835** | **709** | 57 duplicates removed; 1,871 glass/textile/trash images skipped |
+| Class | Compartment | Training | Test | Sources | Subtypes (images) |
+|---|---|---|---|---|---|
+| organic | organic | 1,145 | 286 | RealWaste 846 · King 585 | food scraps 410 · garden waste 436 · food waste/peels 264 · eggshells 321 |
+| paper | organic | 1,201 | 299 | RealWaste 547 · King 546 · TrashNet 407 | paper 278 · cardboard 269+199 · newspaper 228 · flyers/envelopes 208 · boxes 159 · packaging 159 |
+| plastic | inorganic | 1,200 | 300 | King 582 · RealWaste 568 · TrashNet 350 | mixed containers/bottles 568 · clear bottles & clamshells 350 · **shopping bags 290** · **soda bottles 203** · cutlery 89 |
+| metal | inorganic | 1,200 | 300 | King 611 · RealWaste 547 · TrashNet 342 | mixed 547 · cans/tins/foil 342 · **soda cans 328** · food tins 283 |
+| **total** | | **4,746** | **1,185** | | |
+
+* The **709 test photos of the first model (v1) stay in the test set** (`ml/benchmark_v1.csv`), so old and new
+  models are compared on exactly the same photos, and they are never trained on.
+* `manifest.csv` records the **original file and licence** of every image. `integration_report.md`,
+  `summary.json` and `duplicates.csv` are written next to it.
+* **Experiments with more data (22 Nov 2026).** Every model below was tested on the same 709 benchmark photos (int8):
+
+  | Dataset | Runs (material accuracy) | Average | Compartment | Paper recall | Plastic recall |
+  |---|---|---|---|---|---|
+  | v1: RealWaste + TrashNet | 83.8 % | 83.8 % | 90.5 % | 0.76 | 0.77 |
+  | **v2: + King (current)** | **86.6 %**, 84.5 % | **85.6 %** | 92.8 %, 91.0 % | **0.86**, 0.86 | 0.78, 0.79 |
+  | v3: v2 + GD v2 food (699) | 82.8 %, 84.1 % | 83.5 % | 89.1 %, 90.7 % | 0.87, 0.87 | 0.68, 0.76 |
+  | v4: v2 + GD v2 paper/plastic/metal + more King plastic | 82.4 % | 82.4 % | 89.8 % | 0.81 | 0.71 |
+
+  The second v2 run used 98 % of the v2 images (110 King images, mostly soda bottles, were missing from that rebuild
+  because of a bug that is now fixed). Two runs of (almost) the same data differ by about 2 points, so small
+  differences are chance. Clear results:
+  **King reliably improves paper** (0.76 → 0.86 in every run), and **GD v2 did not help on this benchmark** (it
+  lowered plastic recall), so GD v2 is switched off in `prepare_dataset.py`. The best run of v2 is the active model;
+  because it was picked among runs, ~85.6 % (the v2 average) is the more honest estimate. Note that the benchmark
+  photos come from RealWaste and TrashNet, so it rewards training data that looks like them; only photos from the
+  bin's own camera can show which data works best inside the bin. All runs are kept in `ml/output/v*_128_seed*/`.
+* **Exact rebuild:** `ml\.venv\Scripts\python ml\prepare_dataset.py --from-manifest ml\dataset_v2_manifest.csv`
+  recreates exactly the images and train/test split the current model was trained on.
+* The first version (v1) used 2,835 training images from RealWaste and TrashNet only. The audit found that it had
+  wrongly thrown away ~45 good photos as "duplicates" and left 1,807 good photos unused.
 
 The **test set is never used for training**, so its accuracy is an honest estimate.
 
@@ -92,20 +126,24 @@ py -3.12 -m venv ml\.venv
 ml\.venv\Scripts\python -m pip install -r ml\requirements.txt
 
 # every time the photos change
-ml\.venv\Scripts\python ml\prepare_dataset.py          # options: --size 160 --per-class 900
+ml\.venv\Scripts\python ml\prepare_dataset.py          # options: --size 160 --target 1500
+ml\.venv\Scripts\python ml\audit_datasets.py           # optional: inventory + quality check of the v1 datasets
 ```
 
-What it does:
-1. Reads every image in `ml/datasets/raw/*.zip` (also zips inside zips) and `ml/datasets/own/<label>/`.
-2. Maps folder names to our 4 labels (`CLASS_MAP` in the script; add a line to support another dataset).
-3. Removes exact duplicates (MD5) and near-duplicates (perceptual hash).
+What it does (about 10 minutes):
+1. Reads every image in `ml/datasets/raw/` and `ml/datasets/raw_external/` (zip files or folders; zips are never
+   changed) and your own photos in `ml/datasets/own/<label>/[<subtype>/]`.
+2. Maps each source folder to **label + subtype** (`SOURCES` in the script, with a weight per subtype). Folders that
+   are not one of the 4 categories are skipped, and ambiguous ones (paper cups) are listed in the report.
+3. Removes exact duplicates (MD5) and near-duplicates (16×16 difference hash, confirmed by comparing image detail),
+   also across datasets. Different objects on the same plain background are no longer mistaken for duplicates.
 4. **Centre-crops to a square and resizes**, exactly like the camera firmware does before the AI runs
    (`crop_and_interpolate_rgb888`). Training and the camera then see images framed the same way.
-5. Balances the public photos (max 900 per class). **Your own photos are always kept.**
-6. Splits 80 % training / 20 % test, separately for public and own photos.
-7. Writes `ml/datasets/processed/` with `train/`, `test/`, `manifest.csv`, `summary.json`, and
-   `upload_to_edge_impulse.bat`. File names start with the label (`plastic.realwaste_0012.jpg`), which is
-   what Edge Impulse expects.
+5. Balances each class **by subtype** (up to `--target` public photos per class). **Your own photos are always kept.**
+6. Splits 80 % training / 20 % test: the v1 benchmark photos stay in test, new photos from every subtype are added.
+7. Writes `ml/datasets/processed/` with `train/`, `test/`, `manifest.csv` (with the original file and licence),
+   `summary.json`, `integration_report.md`, `duplicates.csv` and `upload_to_edge_impulse.bat`. File names start
+   with the label (`plastic.king_0012.jpg`), which is what Edge Impulse expects.
 
 ---
 
@@ -216,23 +254,27 @@ Either way, sorting takes less than the 3 s target.
 
 ## 8. Results
 
-Trained on the project laptop (Intel Core i5-3427U, 2 cores, 8 GB RAM, no GPU). Test set: **709 photos
-never seen during training**. Full details: `ml/output/MODEL_CARD.md`, `ml/output/metrics.json`.
+Trained on the project laptop (Intel Core i5-3427U, 2 cores, 8 GB RAM, no GPU). Full details:
+`ml/output/MODEL_CARD.md`, `ml/output/metrics.json`. The first model is kept in `ml/output/v1_128/`.
 
-| Model | Training time | Size | Material correct (int8) | **Correct compartment (int8)** |
+**Fair comparison on the same 709 test photos** (the v1 test set, never trained on by either model):
+
+| Model | Training data | Training time | Size | Material correct (int8) | **Correct compartment (int8)** |
+|---|---|---|---|---|---|
+| v1: MobileNetV2 0.35, **96×96** | 2,835 (RealWaste, TrashNet) | 7 min | 609 KB | 77.9 % | 88.3 % |
+| v1: MobileNetV2 0.35, **128×128** | 2,835 (RealWaste, TrashNet) | 15 min | 609 KB | 83.8 % | 90.5 % |
+| **v2: MobileNetV2 0.35, 128×128 (current)** | 4,746 (+ King, subtype-balanced) | 23 min | 609 KB | **86.6 %** | **92.8 %** |
+
+On the full v2 test set (1,185 photos, including new subtypes such as plastic bags, soda bottles, soda cans and
+newspaper), v2 scores **85.9 % material / 91.3 % compartment** (int8). The float32 version scores 86.5 % / 91.8 %,
+so int8 compression costs only 0.6 points. Peak RAM stayed low because training caches images as 8-bit (about 50 KB each).
+
+| Class (v2, 128×128, int8, 1,185 photos) | Precision | Recall | F1 | v1 recall (709 photos) |
 |---|---|---|---|---|
-| MobileNetV2 0.35, **96×96**, 300 calibration images | 7 min | 609 KB | 77.9 % | 88.3 % |
-| MobileNetV2 0.35, **128×128**, 1,000 calibration images (**chosen**) | 15 min | 609 KB | **83.8 %** | **90.5 %** |
-
-The float32 version of the chosen model scores 85.5 % / 91.0 %, so int8 compression costs only 1.7 points.
-The first run lost 5.9 points, because 300 unshuffled calibration images did not cover all classes.
-
-| Class (128×128, int8) | Precision | Recall | F1 |
-|---|---|---|---|
-| organic | 0.94 | 0.96 | 0.95 |
-| paper | 0.88 | 0.76 | 0.81 |
-| plastic | 0.79 | 0.77 | 0.78 |
-| metal | 0.76 | 0.87 | 0.81 |
+| organic | 0.94 | 0.94 | 0.94 | 0.96 |
+| paper | 0.83 | 0.86 | 0.85 | 0.76 |
+| plastic | 0.82 | 0.79 | 0.81 | 0.77 |
+| metal | 0.85 | 0.84 | 0.84 | 0.87 |
 
 ![Confusion matrix](../ml/output/confusion_matrix.png)
 
@@ -254,19 +296,23 @@ teach-the-AI loop (section 9) adds your own photos. Measure it on *Analytics →
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruta54-create/final-project/blob/main/ml/verify_model_colab.ipynb)
 
 `ml/verify_model_colab.ipynb` downloads this repository and tests the **same int8 file** that goes on the ESP32.
-Open it, then *Runtime → Run all* (about 3 minutes, no GPU). Result of the last run:
+Open it, then *Runtime → Run all* (about 3 minutes, no GPU). Result of the last run (v2 model, run locally with
+the same notebook on 21 Nov 2026):
 
-| Check | Result |
-|---|---|
-| Model health (int8, 128×128, labels, 609 KB) | PASS |
-| Only TensorFlow Lite Micro operations (67 ops, 7 kinds) | PASS |
-| Material accuracy, 709 test photos | 84.8 % (model card 83.8 %) |
-| Right compartment | 91.3 % |
-| Plastic/metal ending up in the compost (with the 70 % rule) | 0.8 % |
-| Darker, brighter, blur, rotation, low JPEG quality | compartment ≥ 85.5 % in all: PASS |
-| Item small in the picture | 79.7 %: **WARNING**. Mount the camera so one item fills the picture. |
-| Speed on a PC | about 3 ms per photo |
-| **Verdict** | **14 passed, 1 warning, 0 failed: model verified** |
+| Check | v1 (709 photos) | **v2 (1,185 photos)** |
+|---|---|---|
+| Model health (int8, 128×128, labels, 609 KB) | PASS | PASS |
+| Only TensorFlow Lite Micro operations (67 ops, 7 kinds) | PASS | PASS |
+| Material accuracy | 84.8 % | **85.6 %** (model card 85.9 %) |
+| Right compartment | 91.3 % | 90.7 % |
+| Plastic/metal ending up in the compost (with the 70 % rule) | 0.8 % | 2.0 % (limit 5 %) |
+| Darker, brighter, blur, rotation, low JPEG quality | compartment ≥ 85.5 % | compartment ≥ 86.4 % |
+| Item small in the picture | 79.7 %: WARNING | **85.7 %: PASS** |
+| Speed on a PC | about 3 ms per photo | about 2 ms per photo |
+| **Verdict** | 14 passed, 1 warning | **15 passed, 0 warnings, 0 failed: model verified** |
+
+The v2 test set is larger and harder (it adds web photos of new subtypes), so compare the two models with the
+709-photo table above, where v2 is better on every summary number.
 
 The last cells let you upload your own photos or use the webcam.
 
@@ -301,6 +347,7 @@ bin" before and after. That before/after comparison is strong evidence for your 
 | Problem | Fix |
 |---|---|
 | `pip install tensorflow` fails | use Python **3.12** (`py -3.12 -m venv ml\.venv`); TensorFlow has no wheels for 3.14 |
+| **Test the AI** says “Not running” | Start `RUN_DEMO.bat` and wait for “AI model service is ready.” The AI service opens its own console; if startup fails, read the error there. Check that `ml\.venv` was created with Python 3.12 and `ml\output\model_int8.tflite` exists. |
 | Training is very slow | close Chrome and other programs; use `--size 96`; one epoch ≈ 35 s on an i5-3427U |
 | `No images found` | zips must be in `ml/datasets/raw/`; your own photos in `ml/datasets/own/<label>/` |
 | A new dataset is ignored | its folder names are printed as "not recognised": add them to `CLASS_MAP` |

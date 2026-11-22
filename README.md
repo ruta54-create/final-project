@@ -66,9 +66,9 @@ everything from a web dashboard** in English, French or Kinyarwanda.
 | Area | What it does |
 |---|---|
 | **Edge AI sorting** | ESP32-S3-CAM runs a MobileNetV2 (int8, 600 KB) that recognises **organic, paper, plastic, metal**: organic + paper → organic compartment, plastic + metal → inorganic. Unsure items (< 70 %) go to *inorganic*. |
-| **Own trained model** | Trained on RealWaste + TrashNet on a laptop CPU in minutes (`ml/`); see [docs/DATASET_GUIDE.md](docs/DATASET_GUIDE.md) and `ml/output/MODEL_CARD.md`. |
+| **Own trained model** | Trained on RealWaste + TrashNet + Kaggle household-waste photos (4,746 images, balanced by subtype) on a laptop CPU in 23 min: 86.6 % material / 92.8 % compartment on the original 709-photo benchmark (v1: 83.8 % / 90.5 %) (`ml/`); see [docs/DATASET_GUIDE.md](docs/DATASET_GUIDE.md) and `ml/output/MODEL_CARD.md`. |
 | **Test the AI (no hardware)** | Dashboard page: sample photos, upload or webcam → the same int8 model as the ESP32 → compartment decision; can send the result to the dashboard as a detection. |
-| **Verify the model in Google Colab** | [ml/verify_model_colab.ipynb](https://colab.research.google.com/github/ruta54-create/final-project/blob/main/ml/verify_model_colab.ipynb) checks the int8 model on 709 held-out photos: accuracy, confusion matrix, mistakes, robustness, ESP32 compatibility, speed, PASS/FAIL verdict, plus your own photos or webcam. |
+| **Verify the model in Google Colab** | [ml/verify_model_colab.ipynb](https://colab.research.google.com/github/ruta54-create/final-project/blob/main/ml/verify_model_colab.ipynb) checks the int8 model on 1,185 held-out photos: accuracy, confusion matrix, mistakes, robustness, ESP32 compatibility, speed, PASS/FAIL verdict, plus your own photos or webcam. |
 | **Teach the AI** | People confirm or correct each photo on the dashboard → real-world accuracy + confusion matrix → export checked photos → retrain. |
 | **Fill levels** | Ultrasonic sensor above each compartment → % full, every 30 s (median of 5 readings). |
 | **Prediction (ML)** | Linear-regression filling rate → "organic full in 6 h (tomorrow 04:30)". |
@@ -144,15 +144,16 @@ final-project/
 │   ├── esp32_main/esp32_main.ino   main controller: sensors, servos, LEDs, commands
 │   ├── esp32_cam/esp32_cam.ino     camera + MobileNetV2 AI (4 materials) + photo upload
 │   ├── esp32_cam/camera_pins.h     board selection: ESP32-S3-CAM, XIAO ESP32S3, AI-Thinker
+│   ├── hardware_tests/             9 small sketches to test each part alone (BUILD_GUIDE phase 4)
 │   ├── */secrets.example.h         Wi-Fi / server / API-key template: copy to secrets.h
 │   └── simulator.py                fake bin that behaves like both boards
 │
 ├── ml/                             MACHINE LEARNING (Python 3.12 + TensorFlow)
-│   ├── prepare_dataset.py          RealWaste + TrashNet + own photos → 4 balanced classes
+│   ├── prepare_dataset.py          RealWaste + TrashNet + King + own photos → 4 classes, balanced by subtype
 │   ├── train_mobilenet.py          MobileNetV2 transfer learning + int8 export for the ESP32
 │   ├── serve_model.py              AI service for the dashboard's "Test the AI" page
 │   ├── verify_model_colab.ipynb    Google Colab notebook that verifies the model (Runtime → Run all)
-│   ├── test_set/                   709 held-out test photos (never used in training)
+│   ├── test_set/                   1,185 held-out test photos (never used in training)
 │   ├── requirements.txt
 │   └── output/                     model_int8.tflite, model_data.h, MODEL_CARD.md, charts
 │
@@ -183,6 +184,7 @@ final-project/
 |---|---|
 | [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md) | Problem, objectives, what was improved from the first idea, 12-week plan, risks |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How the parts talk, data flow, database tables, security, languages, deployment |
+| [docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md) | **Step-by-step hardware build, zero to complete system: every wire and why, test sketches, calibration, troubleshooting** |
 | [docs/HARDWARE.md](docs/HARDWARE.md) | Components list, wiring tables, power, mechanical build, calibration |
 | [docs/DATASET_GUIDE.md](docs/DATASET_GUIDE.md) | **Datasets, training the AI on a laptop, ESP32-S3 deployment, results, teach-the-AI loop** |
 | [docs/EDGE_IMPULSE.md](docs/EDGE_IMPULSE.md) | **Putting the model in Edge Impulse (Bring your own model), settings, testing, Arduino library** |

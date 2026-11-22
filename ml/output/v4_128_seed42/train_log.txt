@@ -1,0 +1,79 @@
+Found 4746 files belonging to 4 classes.
+Using 4035 files for training.
+Found 4746 files belonging to 4 classes.
+Using 711 files for validation.
+Found 1185 files belonging to 4 classes.
+C:\Users\rutag\OneDrive\Desktop\My final project\ml\.venv\Lib\site-packages\keras\src\trainers\epoch_iterator.py:74: UserWarning: `shuffle=True` was passed, but will be ignored since the data `x` was provided as a tf.data.Dataset. The Dataset is expected to already be shuffled (via `.shuffle(buffer_size)`).
+  self.data_adapter = data_adapters.get_data_adapter(
+classes: ['organic', 'paper', 'plastic', 'metal']
+training images per class: {'organic': 990, 'paper': 1016, 'plastic': 1000, 'metal': 1029}
+
+=== phase 1: train the classifier head (MobileNetV2 frozen)
+Epoch 1/15
+127/127 - 61s - 477ms/step - accuracy: 0.5720 - loss: 1.0587 - val_accuracy: 0.7553 - val_loss: 0.6296
+Epoch 2/15
+127/127 - 34s - 270ms/step - accuracy: 0.6944 - loss: 0.7696 - val_accuracy: 0.7764 - val_loss: 0.5590
+Epoch 3/15
+127/127 - 35s - 272ms/step - accuracy: 0.7242 - loss: 0.6988 - val_accuracy: 0.7792 - val_loss: 0.5424
+Epoch 4/15
+127/127 - 34s - 269ms/step - accuracy: 0.7435 - loss: 0.6523 - val_accuracy: 0.7989 - val_loss: 0.5213
+Epoch 5/15
+127/127 - 40s - 316ms/step - accuracy: 0.7482 - loss: 0.6240 - val_accuracy: 0.7947 - val_loss: 0.5233
+Epoch 6/15
+127/127 - 45s - 351ms/step - accuracy: 0.7564 - loss: 0.6267 - val_accuracy: 0.8017 - val_loss: 0.5005
+Epoch 7/15
+127/127 - 40s - 311ms/step - accuracy: 0.7603 - loss: 0.6132 - val_accuracy: 0.8017 - val_loss: 0.5135
+Epoch 8/15
+127/127 - 36s - 282ms/step - accuracy: 0.7767 - loss: 0.5909 - val_accuracy: 0.8087 - val_loss: 0.5045
+Epoch 9/15
+127/127 - 34s - 270ms/step - accuracy: 0.7623 - loss: 0.5930 - val_accuracy: 0.8087 - val_loss: 0.5205
+Epoch 10/15
+127/127 - 39s - 308ms/step - accuracy: 0.7633 - loss: 0.5929 - val_accuracy: 0.8059 - val_loss: 0.5202
+Epoch 11/15
+127/127 - 36s - 283ms/step - accuracy: 0.7829 - loss: 0.5630 - val_accuracy: 0.8031 - val_loss: 0.5237
+Epoch 12/15
+127/127 - 37s - 293ms/step - accuracy: 0.7708 - loss: 0.5780 - val_accuracy: 0.8172 - val_loss: 0.4937
+Epoch 13/15
+127/127 - 38s - 300ms/step - accuracy: 0.7698 - loss: 0.5861 - val_accuracy: 0.8073 - val_loss: 0.5216
+Epoch 14/15
+127/127 - 38s - 301ms/step - accuracy: 0.7720 - loss: 0.5764 - val_accuracy: 0.8172 - val_loss: 0.4853
+Epoch 15/15
+127/127 - 40s - 316ms/step - accuracy: 0.7708 - loss: 0.5664 - val_accuracy: 0.8045 - val_loss: 0.5141
+
+=== phase 2: fine-tune the top 40 layers of MobileNetV2
+Epoch 1/15
+127/127 - 55s - 436ms/step - accuracy: 0.7504 - loss: 0.6205 - val_accuracy: 0.8172 - val_loss: 0.4968
+Epoch 2/15
+127/127 - 39s - 306ms/step - accuracy: 0.7799 - loss: 0.5542 - val_accuracy: 0.8045 - val_loss: 0.4826
+Epoch 3/15
+127/127 - 39s - 309ms/step - accuracy: 0.8000 - loss: 0.5066 - val_accuracy: 0.8143 - val_loss: 0.4824
+Epoch 4/15
+127/127 - 39s - 308ms/step - accuracy: 0.8010 - loss: 0.4965 - val_accuracy: 0.8397 - val_loss: 0.4524
+Epoch 5/15
+127/127 - 42s - 330ms/step - accuracy: 0.8161 - loss: 0.4679 - val_accuracy: 0.8228 - val_loss: 0.4769
+Epoch 6/15
+127/127 - 42s - 334ms/step - accuracy: 0.8268 - loss: 0.4390 - val_accuracy: 0.8312 - val_loss: 0.4527
+Epoch 7/15
+127/127 - 39s - 304ms/step - accuracy: 0.8325 - loss: 0.4279 - val_accuracy: 0.8200 - val_loss: 0.4687
+Epoch 8/15
+127/127 - 39s - 304ms/step - accuracy: 0.8384 - loss: 0.4038 - val_accuracy: 0.8368 - val_loss: 0.4454
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1795369315.669898   12700 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
+W0000 00:00:1795369315.671621   12700 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
+I0000 00:00:1795369316.011979   12700 mlir_graph_optimization_pass.cc:437] MLIR V1 optimization pass is not enabled
+fully_quantize: 0, inference_type: 6, input_inference_type: INT8, output_inference_type: INT8
+C:\Users\rutag\OneDrive\Desktop\My final project\ml\.venv\Lib\site-packages\tensorflow\lite\python\interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+
+=== testing (images never seen during training)
+=== int8 quantisation for the ESP32
+
+4-class accuracy  float32 82.7%  |  int8 81.5%
+correct compartment  float32 90.7%  |  int8 89.4%
+int8 model: 609 KB, 2.6 ms/image on this laptop, trained in 17.4 min
+outputs in C:\Users\rutag\OneDrive\Desktop\My final project\ml\output

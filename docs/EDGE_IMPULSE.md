@@ -52,11 +52,11 @@ Use B only if you also want Edge Impulse to train its own version for comparison
 
 1. `npm install -g edge-impulse-cli`
 2. Double-click `ml\datasets\processed\upload_to_edge_impulse.bat` (created by `prepare_dataset.py`; the first
-   time it asks you to log in and choose the project). It uploads the 2,835 training and 709 test photos with labels.
+   time it asks you to log in and choose the project). It uploads the 4,746 training and 1,185 test photos with labels.
 3. **Create impulse**: Image data **128×128**, *Fit shortest axis* → **Image** (RGB) → **Transfer learning (Images)**.
 4. **Transfer learning**: **MobileNetV2 0.35**, 30–40 training cycles, learning rate 0.0005, data augmentation on.
-5. **Model testing** → *Classify all*, then compare with `ml/output/MODEL_CARD.md` (our model: 83.8 % material,
-   90.5 % correct compartment, int8).
+5. **Model testing** → *Classify all*, then compare with `ml/output/MODEL_CARD.md` (our v2 model: 85.9 % material,
+   91.3 % correct compartment, int8, on the 1,185 test photos).
 6. With a phone you can also use **Live classification**: scan the QR code under *Devices → Connect a new device →
    Use your mobile phone* and point the phone at real waste.
 

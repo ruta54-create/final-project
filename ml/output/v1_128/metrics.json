@@ -1,0 +1,139 @@
+{
+  "float32": {
+    "accuracy": 0.8547,
+    "compartment_accuracy": 0.9097,
+    "per_class": {
+      "organic": {
+        "precision": 0.959,
+        "recall": 0.97,
+        "f1": 0.965,
+        "support": 169
+      },
+      "paper": {
+        "precision": 0.918,
+        "recall": 0.744,
+        "f1": 0.822,
+        "support": 180
+      },
+      "plastic": {
+        "precision": 0.782,
+        "recall": 0.839,
+        "f1": 0.81,
+        "support": 180
+      },
+      "metal": {
+        "precision": 0.789,
+        "recall": 0.872,
+        "f1": 0.828,
+        "support": 180
+      }
+    },
+    "confusion_matrix": [
+      [
+        164,
+        0,
+        4,
+        1
+      ],
+      [
+        3,
+        134,
+        24,
+        19
+      ],
+      [
+        2,
+        5,
+        151,
+        22
+      ],
+      [
+        2,
+        7,
+        14,
+        157
+      ]
+    ]
+  },
+  "int8": {
+    "accuracy": 0.8378,
+    "compartment_accuracy": 0.9055,
+    "per_class": {
+      "organic": {
+        "precision": 0.937,
+        "recall": 0.964,
+        "f1": 0.95,
+        "support": 169
+      },
+      "paper": {
+        "precision": 0.878,
+        "recall": 0.761,
+        "f1": 0.815,
+        "support": 180
+      },
+      "plastic": {
+        "precision": 0.793,
+        "recall": 0.767,
+        "f1": 0.78,
+        "support": 180
+      },
+      "metal": {
+        "precision": 0.761,
+        "recall": 0.867,
+        "f1": 0.81,
+        "support": 180
+      }
+    },
+    "confusion_matrix": [
+      [
+        163,
+        1,
+        4,
+        1
+      ],
+      [
+        5,
+        137,
+        19,
+        19
+      ],
+      [
+        4,
+        9,
+        138,
+        29
+      ],
+      [
+        2,
+        9,
+        13,
+        156
+      ]
+    ]
+  },
+  "classes": [
+    "organic",
+    "paper",
+    "plastic",
+    "metal"
+  ],
+  "bins": {
+    "organic": "organic",
+    "paper": "organic",
+    "plastic": "inorganic",
+    "metal": "inorganic"
+  },
+  "input": {
+    "width": 128,
+    "height": 128,
+    "channels": 3,
+    "pixel_range": "0..255 (scaled inside the model)"
+  },
+  "model": "MobileNetV2 alpha=0.35",
+  "params": 415332,
+  "tflite_bytes": 623480,
+  "laptop_int8_ms_per_image": 3.07,
+  "train_minutes": 15.4,
+  "training_images": 2410,
+  "test_images": 709
+}

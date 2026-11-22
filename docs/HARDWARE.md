@@ -1,5 +1,8 @@
 # Hardware Guide
 
+> **Building it? Follow [BUILD_GUIDE.md](BUILD_GUIDE.md)**: the step-by-step guide (every wire and why, test
+> sketches, calibration). This page is the short reference. The recommended camera is the **ESP32-S3-CAM**.
+
 ## 1. Recommended design
 
 ```
@@ -31,8 +34,8 @@ The ESP32 DevKit has 25+ pins for all sensors and servos. They talk over a 2-wir
 
 | # | Component | Qty | Purpose | Approx. price (USD) |
 |---|---|---|---|---|
-| 1 | ESP32-CAM AI-Thinker (OV2640, 4 MB PSRAM) | 1 | camera + AI | 8 |
-| 2 | ESP32-CAM-MB USB programmer board | 1 | flashing the camera | 3 |
+| 1 | ESP32-S3-CAM (OV2640, 8 MB PSRAM), recommended. Alternative: AI-Thinker ESP32-CAM + ESP32-CAM-MB programmer | 1 | camera + AI | 12–15 |
+| 2 | IRLZ44N MOSFET + 220 Ω + 10 kΩ | 1 | switches the LED ring | 0.5 |
 | 3 | ESP32 DevKit V1 (30 pins) | 1 | main controller | 6 |
 | 4 | HC-SR04 ultrasonic sensor | 3 | organic level, inorganic level, hand (lid) | 3 × 1.5 |
 | 5 | (optional) JSN-SR04T waterproof ultrasonic | 1 | organic side (humidity) | 6 |
@@ -68,21 +71,21 @@ The ESP32 DevKit has 25+ pins for all sensors and servos. They talk over a 2-wir
 | Lid servo MG996R | signal | GPIO 14 | same |
 | Buzzer | + / − | GPIO 25 / GND | |
 | LED green / red / blue | anode via 220 Ω | GPIO 26 / 33 / 32 | cathodes to GND |
-| ESP32-CAM | GPIO 13 (its RX) | GPIO 17 (TX2) | UART link, 115200 baud |
-| | GPIO 14 (its TX) | GPIO 16 (RX2) | |
+| ESP32-S3-CAM | GPIO 14 (its RX) | GPIO 17 (TX2) | UART link, 115200 baud (AI-Thinker: GPIO 13) |
+| | GPIO 21 (its TX) | GPIO 16 (RX2) | (AI-Thinker: GPIO 14) |
 | | GND | GND | **common ground is required** |
 
-## 4. Wiring: ESP32-CAM
+## 4. Wiring: ESP32-S3-CAM
 
-| ESP32-CAM pin | Connect to |
+| ESP32-S3-CAM pin | Connect to |
 |---|---|
-| 5V, GND | 5 V supply (the camera needs ≥ 500 mA peaks) |
-| GPIO 13 | main ESP32 GPIO 17 (TX2) |
-| GPIO 14 | main ESP32 GPIO 16 (RX2) |
-| GPIO 4 | on-board flash LED; for a LED ring use a MOSFET (gate = GPIO 4 via 220 Ω) |
+| 5V, GND | 5 V supply (the camera needs ≥ 500 mA peaks), common GND |
+| GPIO 14 (RX) | main ESP32 GPIO 17 (TX2) |
+| GPIO 21 (TX) | main ESP32 GPIO 16 (RX2) |
+| GPIO 47 | 220 Ω → IRLZ44N gate (10 kΩ gate → GND); drain → LED ring −, ring + → 5 V, source → GND |
 
-Flashing: plug the ESP32-CAM on the **ESP32-CAM-MB** board and connect USB. If upload fails, hold
-**IO0** while pressing **RST**.
+Never use GPIO 4/5 on this board: they are the camera's SDA/SCL. Other camera boards: see
+`device/esp32_cam/camera_pins.h` (AI-Thinker: RX 13, TX 14, light GPIO 4, programmed with the ESP32-CAM-MB board).
 
 ## 5. Power
 
@@ -100,7 +103,7 @@ Flashing: plug the ESP32-CAM on the **ESP32-CAM-MB** board and connect USB. If u
 
 ## 6. Mechanical tips
 
-* **Inspection box:** closed, painted **matt white**, LED ring above, camera 20–25 cm above the tray.
+* **Inspection box:** closed, painted **matt white**, LED ring above, camera about 15 cm above the tray so the item fills the picture.
   Constant light and background raise accuracy more than anything else.
 * **Tray:** flat plate on a horizontal axle in the middle; servo horn tilts it ±60° (angles in
   `esp32_main.ino`: `TRAY_ORGANIC = 30`, `TRAY_INORGANIC = 150`, centre `90`).
@@ -120,7 +123,7 @@ Flashing: plug the ESP32-CAM on the **ESP32-CAM-MB** board and connect USB. If u
 | Sketch | Board | Settings |
 |---|---|---|
 | `device/esp32_main/esp32_main.ino` | ESP32 Dev Module | default |
-| `device/esp32_cam/esp32_cam.ino` | AI Thinker ESP32-CAM | PSRAM: Enabled, Partition: Huge APP |
+| `device/esp32_cam/esp32_cam.ino` | ESP32S3 Dev Module (AI-Thinker: AI Thinker ESP32-CAM) | PSRAM: OPI PSRAM, Partition: Huge APP |
 
 Before uploading, copy `secrets.example.h` to `secrets.h` in **each** sketch folder and enter:
 Wi-Fi name/password, `SERVER_URL` = `http://<PC IP>:8000` (find the IP with `ipconfig`), and the bin's

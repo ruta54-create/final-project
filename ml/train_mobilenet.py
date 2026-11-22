@@ -203,12 +203,18 @@ def main():
 
     aug = augmenter()
     auto = tf.data.AUTOTUNE
-    train_plain = train_raw.cache()
+    # cache the decoded images as uint8 (4x less RAM than float32: ~50 KB per 128x128 image),
+    # so several thousand images fit comfortably in 8 GB
+    to_u8 = lambda x, y: (tf.cast(tf.clip_by_value(tf.round(x), 0, 255), tf.uint8), y)  # noqa: E731
+    to_f32 = lambda x, y: (tf.cast(x, tf.float32), y)  # noqa: E731
+    train_plain = train_raw.map(to_u8).cache().map(to_f32)
     def augment(x, y):
         return aug(x, training=True), y
 
-    train = train_plain.shuffle(500, seed=args.seed).map(augment, num_parallel_calls=auto).prefetch(auto)
-    val, test = val.cache().prefetch(auto), test.cache()
+    train = train_plain.shuffle(1000, seed=args.seed).map(augment, num_parallel_calls=auto).prefetch(auto)
+    val = val.map(to_u8).cache().map(to_f32).prefetch(auto)
+    test_files = list(test.file_paths)
+    test = test.map(to_u8).cache().map(to_f32)
 
     model, base = build_model(args.size, len(classes), args.alpha)
     stop = keras.callbacks.EarlyStopping(monitor="val_accuracy", patience=4, restore_best_weights=True)
@@ -237,6 +243,19 @@ def main():
     (OUT / "model_int8.tflite").write_bytes(tflite)
     t_true, t_pred, ms = evaluate_tflite(tflite, test)
     metrics["int8"] = report(t_true, t_pred, classes)
+
+    # same 709 photos as the v1 model was tested on (benchmark_v1 column of manifest.csv) -> fair comparison
+    bench = set()
+    manifest = DATA / "manifest.csv"
+    if manifest.exists():
+        import csv
+        with open(manifest, encoding="utf8") as f:
+            bench = {Path(r["file"]).name for r in csv.DictReader(f) if r.get("benchmark_v1") == "test"}
+    mask = [Path(p).name in bench for p in test_files]
+    if any(mask):
+        pick = lambda seq: [v for v, m in zip(seq, mask) if m]  # noqa: E731
+        metrics["int8_benchmark_v1"] = report(pick(t_true), pick(t_pred), classes)
+        metrics["float32_benchmark_v1"] = report(pick(y_true.tolist()), pick(probs.argmax(1).tolist()), classes)
     metrics.update({
         "classes": classes, "bins": {c: BIN_OF[c] for c in classes},
         "input": {"width": args.size, "height": args.size, "channels": 3, "pixel_range": "0..255 (scaled inside the model)"},
@@ -261,11 +280,15 @@ def main():
         f"* Trained on a laptop CPU in {metrics['train_minutes']} min", "",
         "| Metric (test set) | float32 | int8 (on the ESP32) |", "|---|---|---|",
         f"| Accuracy, 4 classes | {metrics['float32']['accuracy']:.1%} | {m['accuracy']:.1%} |",
-        f"| Correct compartment | {metrics['float32']['compartment_accuracy']:.1%} | {m['compartment_accuracy']:.1%} |", "",
+        f"| Correct compartment | {metrics['float32']['compartment_accuracy']:.1%} | {m['compartment_accuracy']:.1%} |",
+        *([f"| Accuracy on the v1 benchmark ({metrics['int8_benchmark_v1']['per_class'] and sum(v['support'] for v in metrics['int8_benchmark_v1']['per_class'].values())} photos the first model was tested on) | "
+           f"{metrics['float32_benchmark_v1']['accuracy']:.1%} | {metrics['int8_benchmark_v1']['accuracy']:.1%} |"]
+          if "int8_benchmark_v1" in metrics else []), "",
         "| Class | Precision | Recall | F1 | Test images |", "|---|---|---|---|---|",
         *[f"| {c} | {v['precision']:.2f} | {v['recall']:.2f} | {v['f1']:.2f} | {v['support']} |" for c, v in m["per_class"].items()],
         "", "![Confusion matrix](confusion_matrix.png)", "", "![Training curves](training_curves.png)", "",
-        "**Limits:** trained mostly on public photos (RealWaste, TrashNet). Accuracy inside the real bin depends on adding "
+        "**Data:** see `ml/datasets/processed/integration_report.md` (sources, subtypes, licences). "
+        "**Limits:** trained mostly on public photos. Accuracy inside the real bin depends on adding "
         "your own ESP32 photos (see docs/DATASET_GUIDE.md, section 5) and retraining.",
     ]
     (OUT / "MODEL_CARD.md").write_text("\n".join(lines) + "\n", encoding="utf8")

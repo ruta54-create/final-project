@@ -1,0 +1,251 @@
+{
+  "float32": {
+    "accuracy": 0.827,
+    "compartment_accuracy": 0.9072,
+    "per_class": {
+      "organic": {
+        "precision": 0.935,
+        "recall": 0.913,
+        "f1": 0.924,
+        "support": 286
+      },
+      "paper": {
+        "precision": 0.855,
+        "recall": 0.801,
+        "f1": 0.827,
+        "support": 301
+      },
+      "plastic": {
+        "precision": 0.814,
+        "recall": 0.721,
+        "f1": 0.765,
+        "support": 298
+      },
+      "metal": {
+        "precision": 0.731,
+        "recall": 0.877,
+        "f1": 0.797,
+        "support": 300
+      }
+    },
+    "confusion_matrix": [
+      [
+        261,
+        9,
+        7,
+        9
+      ],
+      [
+        8,
+        241,
+        25,
+        27
+      ],
+      [
+        4,
+        18,
+        215,
+        61
+      ],
+      [
+        6,
+        14,
+        17,
+        263
+      ]
+    ]
+  },
+  "int8": {
+    "accuracy": 0.8152,
+    "compartment_accuracy": 0.8937,
+    "per_class": {
+      "organic": {
+        "precision": 0.938,
+        "recall": 0.902,
+        "f1": 0.92,
+        "support": 286
+      },
+      "paper": {
+        "precision": 0.783,
+        "recall": 0.837,
+        "f1": 0.809,
+        "support": 301
+      },
+      "plastic": {
+        "precision": 0.805,
+        "recall": 0.664,
+        "f1": 0.728,
+        "support": 298
+      },
+      "metal": {
+        "precision": 0.754,
+        "recall": 0.86,
+        "f1": 0.804,
+        "support": 300
+      }
+    },
+    "confusion_matrix": [
+      [
+        258,
+        12,
+        9,
+        7
+      ],
+      [
+        7,
+        252,
+        21,
+        21
+      ],
+      [
+        5,
+        39,
+        198,
+        56
+      ],
+      [
+        5,
+        19,
+        18,
+        258
+      ]
+    ]
+  },
+  "int8_benchmark_v1": {
+    "accuracy": 0.8237,
+    "compartment_accuracy": 0.8984,
+    "per_class": {
+      "organic": {
+        "precision": 0.931,
+        "recall": 0.953,
+        "f1": 0.942,
+        "support": 169
+      },
+      "paper": {
+        "precision": 0.833,
+        "recall": 0.806,
+        "f1": 0.819,
+        "support": 180
+      },
+      "plastic": {
+        "precision": 0.774,
+        "recall": 0.706,
+        "f1": 0.738,
+        "support": 180
+      },
+      "metal": {
+        "precision": 0.763,
+        "recall": 0.839,
+        "f1": 0.799,
+        "support": 180
+      }
+    },
+    "confusion_matrix": [
+      [
+        161,
+        2,
+        5,
+        1
+      ],
+      [
+        4,
+        145,
+        17,
+        14
+      ],
+      [
+        3,
+        18,
+        127,
+        32
+      ],
+      [
+        5,
+        9,
+        15,
+        151
+      ]
+    ]
+  },
+  "float32_benchmark_v1": {
+    "accuracy": 0.8265,
+    "compartment_accuracy": 0.9083,
+    "per_class": {
+      "organic": {
+        "precision": 0.92,
+        "recall": 0.959,
+        "f1": 0.939,
+        "support": 169
+      },
+      "paper": {
+        "precision": 0.901,
+        "recall": 0.761,
+        "f1": 0.825,
+        "support": 180
+      },
+      "plastic": {
+        "precision": 0.786,
+        "recall": 0.733,
+        "f1": 0.759,
+        "support": 180
+      },
+      "metal": {
+        "precision": 0.728,
+        "recall": 0.861,
+        "f1": 0.789,
+        "support": 180
+      }
+    },
+    "confusion_matrix": [
+      [
+        162,
+        2,
+        4,
+        1
+      ],
+      [
+        5,
+        137,
+        20,
+        18
+      ],
+      [
+        3,
+        6,
+        132,
+        39
+      ],
+      [
+        6,
+        7,
+        12,
+        155
+      ]
+    ]
+  },
+  "classes": [
+    "organic",
+    "paper",
+    "plastic",
+    "metal"
+  ],
+  "bins": {
+    "organic": "organic",
+    "paper": "organic",
+    "plastic": "inorganic",
+    "metal": "inorganic"
+  },
+  "input": {
+    "width": 128,
+    "height": 128,
+    "channels": 3,
+    "pixel_range": "0..255 (scaled inside the model)"
+  },
+  "model": "MobileNetV2 alpha=0.35",
+  "params": 415332,
+  "tflite_bytes": 623480,
+  "laptop_int8_ms_per_image": 2.57,
+  "train_minutes": 17.4,
+  "training_images": 4035,
+  "test_images": 1185
+}
